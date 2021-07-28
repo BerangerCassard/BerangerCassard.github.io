@@ -41,52 +41,53 @@ fetch(recipesData)
     /**
      * Get lis of all Ingredients and keep uniq values
      * */
-    let allIngredientsInstances;
-    function ingredientsUniqList(recipeInstances) {
-        let allIngredients = [];
+    let allIngredients;
+    function ingredientsUniqList(allRecipes) {
+        let allIngredientsWithDoubles = [];
         // for each instance...
-        recipeInstances.forEach(recipe => {
+        allRecipes.forEach(recipe => {
             // loop through ingredients
             let t;
             for (t = 0; t < recipe.ingredients.length; t++) {
                 // merge every ingredient to array
-                allIngredients = allIngredients.concat(recipe.ingredients[t].ingredient.toLocaleLowerCase());
+                allIngredientsWithDoubles = allIngredientsWithDoubles.concat(recipe.ingredients[t].ingredient.toLocaleLowerCase());
             }
         });
         // make this ingredients uniq through Set
-        const allIngredientsUniqSet = new Set(allIngredients);
+        const allIngredientsUniqSet = new Set(allIngredientsWithDoubles);
         // save uniq ingredients list in variable
-        allIngredientsInstances = Array.from(allIngredientsUniqSet);
+        allIngredients = Array.from(allIngredientsUniqSet);
     }
     ingredientsUniqList(allRecipesOnActiveTags);
     /**
      * Get list of all appliances and keep uniq values
      * */
-    let allAppliancesInstances;
-    function appliancesUniqList(recipeInstances) {
+    let allAppliances;
+    function appliancesUniqList(allRecipes) {
         // map recipes to get appliances list
-        const appliancesRawList = recipeInstances.map(recipe => recipe.appliance.toLowerCase());
+        const appliancesWithDoubles = allRecipes.map(recipe => recipe.appliance.toLowerCase());
         // make this appliances uniq through Set
-        const appliancesUniqSet = new Set(appliancesRawList);
+        const appliancesUniqSet = new Set(appliancesWithDoubles);
         // save uniq appliances list in variable
-        allAppliancesInstances = Array.from(appliancesUniqSet);
+        allAppliances = Array.from(appliancesUniqSet);
     }
     appliancesUniqList(allRecipesOnActiveTags);
+    console.log('all appliances', allAppliances)
     /**
      * Get list of all Utensils and keep uniq values
      * */
-    let allUtensilsInstances;
-    function utensilsUniqList(recipeInstances) {
-        let allUtensils = [];
+    let allUtensils;
+    function utensilsUniqList(allRecipes) {
+        let allUtensilsWithDoubles = [];
         let i;
         // for each instance merge utensils into array
-        for (i = 0; i < recipeInstances.length; i++) {
-            allUtensils = allUtensils.concat(recipeInstances[i].ustensils);
+        for (i = 0; i < allRecipes.length; i++) {
+            allUtensilsWithDoubles = allUtensilsWithDoubles.concat(allRecipes[i].ustensils);
         }
         // make this appliances uniq through Set
-        const allUtensilsUniqSet = new Set(allUtensils);
+        const allUtensilsUniqSet = new Set(allUtensilsWithDoubles);
         // save uniq utensils list in variable
-        allUtensilsInstances = Array.from(allUtensilsUniqSet).map(utensil => utensil.toLocaleLowerCase());
+        allUtensils = Array.from(allUtensilsUniqSet).map(utensil => utensil.toLocaleLowerCase());
     }
     utensilsUniqList(allRecipesOnActiveTags);
     /**
@@ -119,9 +120,9 @@ fetch(recipesData)
             }
         });
     }
-    displaySuggestion(ingredientsSearchBar, allIngredientsInstances, ingredientsSuggestionsContainer, 'ingredientTag');
-    displaySuggestion(appliancesSearchBar, allAppliancesInstances, appliancesSuggestionsContainer, 'applianceTag');
-    displaySuggestion(utensilsSearchBar, allUtensilsInstances, utensilsSuggestionsContainer, 'utensilTag');
+    displaySuggestion(ingredientsSearchBar, allIngredients, ingredientsSuggestionsContainer, 'ingredientTag');
+    displaySuggestion(appliancesSearchBar, allAppliances, appliancesSuggestionsContainer, 'applianceTag');
+    displaySuggestion(utensilsSearchBar, allUtensils, utensilsSuggestionsContainer, 'utensilTag');
     /**
      * Double Click to display Suggestion
      * */
@@ -153,9 +154,9 @@ fetch(recipesData)
             });
         }
     }
-    dblClickSuggestion(ingredientsSearchBar, allIngredientsInstances, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
-    dblClickSuggestion(appliancesSearchBar, allAppliancesInstances, appliancesSuggestionsContainer, 'applianceTag', appliances, applianceSelected, applianceSelectedBox);
-    dblClickSuggestion(utensilsSearchBar, allUtensilsInstances, utensilsSuggestionsContainer, 'utensilTag', utensils, utensilSelected, utensilSelectedBox);
+    dblClickSuggestion(ingredientsSearchBar, allIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
+    dblClickSuggestion(appliancesSearchBar, allAppliances, appliancesSuggestionsContainer, 'applianceTag', appliances, applianceSelected, applianceSelectedBox);
+    dblClickSuggestion(utensilsSearchBar, allUtensils, utensilsSuggestionsContainer, 'utensilTag', utensils, utensilSelected, utensilSelectedBox);
     /**
      * Click on an ingredient to display it on the top
      * */
@@ -227,14 +228,17 @@ fetch(recipesData)
                 // filter recipes with those that contain the target
                 recipesWithIngredient = allRecipes
                     .filter(recipe => recipe.ingredients
-                    .some(element => element.ingredient.toLowerCase() == modifiedTitle));
+                        .some(element => element.ingredient.toLowerCase() == modifiedTitle));
                 // set variable depending on active tags
                 allRecipesOnActiveTags = allRecipes
                     .filter(recipe => recipesWithIngredient.includes(recipe))
                     .filter(recipe => recipesWithAppliance.includes(recipe))
                     .filter(recipe => recipesWithUtensil.includes(recipe));
-                console.log('recipe with ingredient', recipesWithIngredient);
-                console.log('all recipes', allRecipesOnActiveTags);
+                // update lists
+                appliancesUniqList(allRecipesOnActiveTags);
+                console.log('all appliances', allAppliances);
+                utensilsUniqList(allRecipesOnActiveTags);
+
                 // filter recipes which those included in other filters
                 const recipesIncludedInAll = recipesWithIngredient
                     .filter(recipe => recipesWithAppliance.includes(recipe))
