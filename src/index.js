@@ -72,7 +72,6 @@ fetch(recipesData)
         allAppliances = Array.from(appliancesUniqSet);
     }
     appliancesUniqList(allRecipesOnActiveTags);
-    console.log('all appliances', allAppliances)
     /**
      * Get list of all Utensils and keep uniq values
      * */
@@ -99,7 +98,7 @@ fetch(recipesData)
     /**
      * Key up on search bar to suggest lists of ingredients
      * */
-    function KeyUpGenerateSuggestions(searchBar, elements, container, classAtt) {
+    function keyUpGenerateSuggestions(searchBar, elements, container, classAtt) {
         // key up in search bar...
         searchBar.addEventListener("keyup", (event) => {
             // catch search bar value
@@ -120,9 +119,9 @@ fetch(recipesData)
             }
         });
     }
-    KeyUpGenerateSuggestions(ingredientsSearchBar, allIngredients, ingredientsSuggestionsContainer, 'ingredientTag');
-    KeyUpGenerateSuggestions(appliancesSearchBar, allAppliances, appliancesSuggestionsContainer, 'applianceTag');
-    KeyUpGenerateSuggestions(utensilsSearchBar, allUtensils, utensilsSuggestionsContainer, 'utensilTag');
+    keyUpGenerateSuggestions(ingredientsSearchBar, allIngredients, ingredientsSuggestionsContainer, 'ingredientTag');
+    keyUpGenerateSuggestions(appliancesSearchBar, allAppliances, appliancesSuggestionsContainer, 'applianceTag');
+    keyUpGenerateSuggestions(utensilsSearchBar, allUtensils, utensilsSuggestionsContainer, 'utensilTag');
     /**
      * Double Click to display Suggestion
      * */
@@ -145,7 +144,6 @@ fetch(recipesData)
         if (!InputValue) {
             // double clicking...
             searchBar.addEventListener('dblclick', () => {
-                console.log(elementsList)
                 // for each element
                 elementsList.forEach(element => {
                     // inject HTML
@@ -161,15 +159,15 @@ fetch(recipesData)
     /**
      * Click on an ingredient to display it on the top
      * */
-    function ClickOnSuggestionSaveAsTag(searchBar, elements, selection, box) {
+    function clickOnSuggestionSaveAsTag(searchBar, elements, selection, box) {
         // when keyup in search bars
         searchBar.addEventListener('keyup', () => {
             saveElementOnClick(elements, selection, box);
         });
     }
-    ClickOnSuggestionSaveAsTag(ingredientsSearchBar, ingredients, ingredientSelected, ingredientSelectedBox);
-    ClickOnSuggestionSaveAsTag(appliancesSearchBar, appliances, applianceSelected, applianceSelectedBox);
-    ClickOnSuggestionSaveAsTag(utensilsSearchBar, utensils, utensilSelected, utensilSelectedBox);
+    clickOnSuggestionSaveAsTag(ingredientsSearchBar, ingredients, ingredientSelected, ingredientSelectedBox);
+    clickOnSuggestionSaveAsTag(appliancesSearchBar, appliances, applianceSelected, applianceSelectedBox);
+    clickOnSuggestionSaveAsTag(utensilsSearchBar, utensils, utensilSelected, utensilSelectedBox);
     /**
      * Click on Cross element effects
      * */
@@ -236,17 +234,24 @@ fetch(recipesData)
                     .filter(recipe => recipesWithIngredient.includes(recipe))
                     .filter(recipe => recipesWithAppliance.includes(recipe))
                     .filter(recipe => recipesWithUtensil.includes(recipe));
+
+                console.log('allRecipesOnActiveTag', allRecipesOnActiveTags)
                 // update lists
+                ingredientsUniqList(allRecipesOnActiveTags)
+                console.log('all ingredients', allIngredients)
                 appliancesUniqList(allRecipesOnActiveTags);
                 console.log('all appliances', allAppliances);
                 utensilsUniqList(allRecipesOnActiveTags);
-                // display suggestions
-                KeyUpGenerateSuggestions(appliancesSearchBar, allAppliances, appliancesSuggestionsContainer, 'applianceTag');
                 console.log('all utensils', allUtensils);
-                KeyUpGenerateSuggestions(utensilsSearchBar, allUtensils, utensilsSuggestionsContainer, 'utensilTag');
+                // display suggestions
+                keyUpGenerateSuggestions(ingredientsSearchBar, allIngredients, ingredientsSuggestionsContainer, 'ingredientTag');
+                keyUpGenerateSuggestions(appliancesSearchBar, allAppliances, appliancesSuggestionsContainer, 'applianceTag');
+                keyUpGenerateSuggestions(utensilsSearchBar, allUtensils, utensilsSuggestionsContainer, 'utensilTag');
+
                 // save as tag
-                ClickOnSuggestionSaveAsTag(appliancesSearchBar, appliances, applianceSelected, applianceSelectedBox);
-                ClickOnSuggestionSaveAsTag(utensilsSearchBar, utensils, utensilSelected, utensilSelectedBox);
+                clickOnSuggestionSaveAsTag(ingredientsSearchBar, ingredients, ingredientSelected, ingredientSelectedBox);
+                clickOnSuggestionSaveAsTag(appliancesSearchBar, appliances, applianceSelected, applianceSelectedBox);
+                clickOnSuggestionSaveAsTag(utensilsSearchBar, utensils, utensilSelected, utensilSelectedBox);
 
 
                 // filter recipes which those included in other filters
@@ -279,6 +284,13 @@ fetch(recipesData)
                 // filter recipes with those containing the target
                 recipesWithAppliance = allRecipes
                     .filter(recipe => recipe.appliance.toLowerCase() == modifiedTitle);
+                // set variable depending on active tags
+                allRecipesOnActiveTags = allRecipes
+                    .filter(recipe => recipesWithIngredient.includes(recipe))
+                    .filter(recipe => recipesWithAppliance.includes(recipe))
+                    .filter(recipe => recipesWithUtensil.includes(recipe));
+                // update list
+
                 // filter recipes which those included in other filters
                 const recipesIncludedInAll = recipesWithAppliance
                     .filter(recipe => recipesWithIngredient.includes(recipe))
