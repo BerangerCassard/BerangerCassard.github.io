@@ -1,5 +1,4 @@
-import "./assets/styles/sass/main.scss";
-import { Recipe } from "./domain/model.class";
+import {Recipe} from "./domain/model.class.js";
 /**
  * Fetch Json data
  * */

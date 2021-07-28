@@ -1,4 +1,3 @@
-import { StringUtil } from "../common/string.util";
 export class Recipe {
     /**
      *
@@ -40,7 +39,7 @@ export class Recipe {
     ingredientsHTML() {
         const ingredientsList = [];
         this.ingredients.forEach(ingredient => {
-            ingredientsList.push(`<p class="ingredient"><b>${ingredient.ingredient}</b>  ${StringUtil.emptyIfUndefined(ingredient.quantity)}  ${StringUtil.emptyIfUndefined(ingredient.unit)}</p>`);
+            ingredientsList.push(`<p class="ingredient"><b>${ingredient.ingredient}</b>  ${ingredient.quantity}  ${ingredient.unit}</p>`);
         });
         return ingredientsList.join('');
     }
