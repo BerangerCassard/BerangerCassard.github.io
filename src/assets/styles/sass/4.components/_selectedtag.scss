@@ -1,0 +1,33 @@
+.search__checkedTags {
+  display: flex;
+  gap: 2%;
+  margin: 0 0 13px 0;
+
+  &__tag {
+    display: none;
+    gap: 5px;
+    grid-template-columns: 3fr 1fr;
+    align-items: center;
+    border-radius: 5px;
+    padding: 5px 10px 5px 10px;
+    color: white;
+    font-size: 13px;
+
+    & .fa-times-circle {
+      justify-self: right;
+      font-size: 20px;
+    }
+  }
+}
+
+#ingredientSelectTag {
+  background-color: #3282F7;
+}
+
+#applianceSelectTag {
+  background-color: #68D9A4;
+}
+
+#utensilSelectedTag {
+  background-color: #ED6454;
+}

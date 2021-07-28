@@ -1,0 +1,146 @@
+#searchBar {
+  display: block;
+  margin: 15px auto;
+  height: 50px;
+  width: 100%;
+  background-color: #E7E7E7;
+  border-radius: 5px;
+  border: none;
+  //color: black;
+}
+
+.search__tagsLists {
+  display: flex;
+  gap: 1%;
+
+  &__frame {
+    display: flex;
+
+    &__input {
+      height: 40px;
+      color: white;
+      border-radius: 5px 0 0 5px;
+      padding-left: 10px;
+      width: 93px;
+      border: none;
+
+      &:focus {
+        outline: none;
+
+        &::placeholder {
+          color: transparent;
+        }
+
+        & +.search__tagsLists__frame__block::after {
+          display: block;
+          transform: rotate(180deg);
+          transform-origin: 20% 40%;
+        }
+      }
+
+      &:not(:focus) {
+        & +.search__tagsLists__frame__block::after {
+          display: block;
+          transform: rotate(0deg);
+          transform-origin: 20% 40%;
+        }
+      }
+
+      &::placeholder {
+        color: white;
+        padding-left: 10px;
+        font-size: 13px;
+      }
+    }
+
+    &__block {
+      border-radius: 0 5px 5px 0;
+      width: 30px;
+
+      &::after {
+        font-family: "Font Awesome 5 Free";
+        font-weight: 800;
+        content: "\f078";
+        color: white;
+        font-size: 15px;
+        position: relative;
+        right: -8px;
+        top: 15px;
+        transition: transform 1000ms;
+      }
+    }
+  }
+
+  &__suggestionsList {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    overflow-wrap: break-word;
+    max-width: 450px;
+    max-height: 200px;
+    overflow: auto;
+    color: white;
+    margin: auto;
+    row-gap: 3px;
+  }
+
+  .suggestion {
+    padding-left: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+
+//ingredient
+  #searchIngredient {
+    background-color: #3282F7;
+  }
+  #ingredientsSuggestions {
+    background-color: #3282F7;
+  }
+  .ingredient{
+    &:hover {
+      background-color: white;
+      color: #3282F7;
+    }
+  }
+
+  //Appliance
+  #searchAppareil {
+    background-color: #68D9A4;
+  }
+  #appareilsSuggestions {
+    background-color: #68D9A4;
+  }
+  .appliance{
+    &:hover {
+      background-color: white;
+      color: #68D9A4;
+    }
+  }
+
+  //Utensil
+  #searchUstensile {
+    background-color: #ED6454;
+  }
+  #utensilsSuggestions {
+    background-color: #ED6454;
+  }
+  .utensil{
+    &:hover {
+      background-color: white;
+      color: #ED6454;
+    }
+  }
+
+  #ingredientArrowBloc {
+    background-color: #3282F7;
+  }
+
+  #appareilArrowBloc {
+    background-color: #68D9A4;
+  }
+
+  #utensilArrowBloc {
+    background-color: #ED6454;
+  }
+}

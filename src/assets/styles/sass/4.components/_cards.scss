@@ -1,0 +1,67 @@
+.recipesList {
+  color: black;
+
+  &__card {
+    width: 380px;
+    height: 360px;
+    background-color: #E7E7E7;
+
+    &__image {
+      background-color: #C7BEBE;
+      border-radius: 5px 5px 0 0;
+      width: 378px;
+      height: 178px;
+    }
+    &__description {
+      border-radius: 0 0 5px 5px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 2fr;
+      justify-content: center;
+      padding: 0 10px;
+      height: 178px;
+      column-gap: 5px;
+
+      &__name {
+        font-size: 18px;
+        font-weight: 400;
+        align-self: center;
+        justify-self: left;
+      }
+
+      &__time {
+        font-size: 18px;
+        font-weight: 700;
+        align-self: center;
+        justify-self: right;
+
+        &::before {
+          font-family: "Font Awesome 5 Free";
+          font-weight: 400;
+          content: "\f017";
+          margin-right: 5px;
+          font-size: 21px;
+          position: relative;
+          top: 1px;
+        }
+      }
+
+      &__ingredients {
+      }
+
+      &__process {
+        line-height: 13px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+
+#recipesContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  row-gap: 45px;
+  justify-items: center;
+  margin-top: 40px;
+}

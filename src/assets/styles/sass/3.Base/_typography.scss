@@ -1,0 +1,14 @@
+* {
+  font-family: lato;
+  font-size: 12px;
+
+  & p {
+  line-height: 14px;
+  }
+  & .ingredient {
+
+    margin-block-start: 2px;
+    margin-block-end: 2px;
+  }
+}
+
