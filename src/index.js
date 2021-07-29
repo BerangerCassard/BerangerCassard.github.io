@@ -246,7 +246,7 @@ fetch(recipesData)
                 // clear container HTML
                 recipesContainer.innerHTML = '';
                 // if active tag, inject html of this tag
-                let activeTagsRecipes
+                let activeTagsRecipes = []
                 if (applianceSelectedBox.style.display == 'grid' && utensilSelectedBox.style.display == 'none') {
                     activeTagsRecipes = recipesWithAppliance.filter(recipe => !recipesWithIngredient.includes(recipe));
                     }
@@ -254,6 +254,7 @@ fetch(recipesData)
                     activeTagsRecipes = recipesWithAppliance
                         .filter(recipe => !recipesWithIngredient.includes(recipe))
                         .filter(recipe => !recipesWithUtensil.includes(recipe))
+                        .concat(recipesWithUtensil)
                 } else if(applianceSelectedBox.style.display == 'none' && utensilSelectedBox.style.display == 'grid') {
                     activeTagsRecipes = recipesWithUtensil.filter(recipe => !recipesWithIngredient.includes(recipe));
                 }
@@ -283,20 +284,26 @@ fetch(recipesData)
                 const modifiedTitle = mutation.target.getAttribute('title');
                 // clear container HTML
                 recipesContainer.innerHTML = '';
-                // if active tag, inject html of this tag
-                if(ingredientSelectedBox.style.display == 'grid'){
-                    recipesWithIngredient.forEach( ingredient => {
-                        recipesContainer.innerHTML += `${ingredient.cardHTML()}`
-                    })
-                } else if(utensilSelectedBox.style.display == 'grid') {
-                    recipesWithUtensil.forEach( utensil => {
-                        recipesContainer.innerHTML += `${utensil.cardHTML()}`
-                    })
-                }
                 // filter recipes with those containing the target
                 recipesWithAppliance = allRecipes
                     .filter(recipe => recipe.appliance.toLowerCase() == modifiedTitle);
                 console.log('recipes with appliances', recipesWithAppliance)
+                // if active tag, inject html of this tag
+                let activeTagsRecipes = [];
+                if (ingredientSelectedBox.style.display == 'grid' && utensilSelectedBox.style.display == 'none') {
+                    activeTagsRecipes = recipesWithIngredient.filter(recipe => !recipesWithAppliance.includes(recipe));
+                }
+                else if (ingredientSelectedBox.style.display == 'grid' && utensilSelectedBox.style.display == 'grid') {
+                    activeTagsRecipes = recipesWithIngredient
+                        .filter(recipe => !recipesWithAppliance.includes(recipe))
+                        .filter(recipe => !recipesWithUtensil.includes(recipe))
+                        .concat(recipesWithUtensil);
+                } else if(applianceSelectedBox.style.display == 'none' && utensilSelectedBox.style.display == 'grid') {
+                    activeTagsRecipes = recipesWithUtensil.filter(recipe => !recipesWithAppliance.includes(recipe));
+                }
+                activeTagsRecipes.forEach( utensil => {
+                    recipesContainer.innerHTML += `${utensil.cardHTML()}`
+                })
                 // for each recipe inject HTML in container
                 recipesWithAppliance.forEach(recip => {
                     recipesContainer.innerHTML += `${recip.cardHTML()}`;
@@ -320,20 +327,26 @@ fetch(recipesData)
                 const modifiedTitle = mutation.target.getAttribute('title');
                 // clear container HTML
                 recipesContainer.innerHTML = '';
-                // if active tag, inject html of this tag
-                if(ingredientSelectedBox.style.display == 'grid'){
-                    recipesWithIngredient.forEach( ingredient => {
-                        recipesContainer.innerHTML += `${ingredient.cardHTML()}`
-                    })
-                } else if(applianceSelectedBox.style.display == 'grid') {
-                    recipesWithAppliance.forEach( appliance => {
-                        recipesContainer.innerHTML += `${appliance.cardHTML()}`
-                    })
-                }
                 // filter recipes with those that contain the target
                 recipesWithUtensil = allRecipes
                     .filter(recipe => recipe.ustensils.includes(modifiedTitle));
                 console.log('recipes with utensils', recipesWithUtensil)
+                // if active tag, inject html of this tag
+                let activeTagsRecipes = [];
+                if (ingredientSelectedBox.style.display == 'grid' && applianceSelectedBox.style.display == 'none') {
+                    activeTagsRecipes = recipesWithIngredient.filter(recipe => !recipesWithUtensil.includes(recipe));
+                }
+                else if (ingredientSelectedBox.style.display == 'grid' && applianceSelectedBox.style.display == 'grid') {
+                    activeTagsRecipes = recipesWithIngredient
+                        .filter(recipe => !recipesWithAppliance.includes(recipe))
+                        .filter(recipe => !recipesWithUtensil.includes(recipe))
+                        .concat(recipesWithAppliance)
+                } else if(ingredientSelectedBox.style.display == 'none' && applianceSelectedBox.style.display == 'grid') {
+                    activeTagsRecipes = recipesWithAppliance.filter(recipe => !recipesWithUtensil.includes(recipe));
+                }
+                activeTagsRecipes.forEach( utensil => {
+                    recipesContainer.innerHTML += `${utensil.cardHTML()}`
+                })
                 // for each recipe inject HTML in container
                 recipesWithUtensil.forEach(recip => {
                     recipesContainer.innerHTML += `${recip.cardHTML()}`;
