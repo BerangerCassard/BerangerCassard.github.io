@@ -58,7 +58,7 @@ fetch(recipesData)
         // save uniq ingredients list in variable
         allIngredients = Array.from(allIngredientsUniqSet);
     }
-    ingredientsUniqList(allRecipesOnActiveTags);
+    ingredientsUniqList(allRecipes);
     /**
      * Get list of all appliances and keep uniq values
      * */
@@ -71,7 +71,7 @@ fetch(recipesData)
         // save uniq appliances list in variable
         allAppliances = Array.from(appliancesUniqSet);
     }
-    appliancesUniqList(allRecipesOnActiveTags);
+    appliancesUniqList(allRecipes);
     /**
      * Get list of all Utensils and keep uniq values
      * */
