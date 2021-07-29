@@ -1,8 +1,8 @@
-import {Recipe} from "./domain/model.class.js";
+import {Recipe} from "./src/domain/model.class.js";
 /**
  * Fetch Json data
  * */
-const recipesData = './assets/data/recipes.json';
+const recipesData = './src/assets/data/recipes.json';
 fetch(recipesData)
     .then(res => res.json())
     .then(data => {
