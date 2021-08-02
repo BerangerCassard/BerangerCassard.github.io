@@ -144,7 +144,7 @@ fetch(recipesData)
         // if no input value in search bar
         if (!InputValue) {
             // double clicking...
-            searchBar.addEventListener('dblclick', () => {
+            searchBar.addEventListener('click', () => {
                 // for each element
                 elementsList.forEach(element => {
                     // inject HTML
