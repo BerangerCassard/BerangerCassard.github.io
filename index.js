@@ -239,9 +239,11 @@ fetch(recipesData)
                 // get attribute of target
                 const modifiedTitle = mutation.target.getAttribute('title');
                 // filter recipes with those that contain the target
-                recipesWithIngredient = allRecipes
-                    .filter(recipe => recipe.ingredients
+                function filterIngredients(Recipes) {
+                    recipesWithIngredient = Recipes.filter(recipe => recipe.ingredients
                         .some(element => element.ingredient.toLowerCase() == modifiedTitle));
+                }
+               filterIngredients(allRecipes)
                 console.log('recipes with ingredient', recipesWithIngredient)
                 // clear container HTML
                 recipesContainer.innerHTML = '';
