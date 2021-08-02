@@ -29,24 +29,34 @@ fetch(recipesData)
     const applianceCross = document.getElementById('applianceCross');
     const utensilSelectedBox = document.getElementById('utensilSelectedTag');
     const utensilCross = document.getElementById('utensilCross');
+
     const allRecipes = [];
     data.forEach(recipe => {
         const recipeInstance = new Recipe(recipe.id, recipe.name, recipe.servings, recipe.ingredients, recipe.time, recipe.description, recipe.appliance, recipe.ustensils);
         allRecipes.push(recipeInstance);
     });
-
     let recipesWithIngredient
     let recipesWithAppliance
     let recipesWithUtensil
 
     /**
+     * Activate all recipes
+     * */
+    function activateCards(recipes){
+        recipes.forEach(recipe => recipe.active= true);
+    }
+    activateCards(allRecipes)
+
+    let activeRecipes = allRecipes.filter(recipe => recipe.active == true);
+
+    /**
      * Get lis of all Ingredients and keep uniq values
      * */
-    let allIngredients;
-    function ingredientsUniqList(allRecipes) {
+    let activeIngredients;
+    function ingredientsUniqList(recipes) {
         let allIngredientsWithDoubles = [];
         // for each instance...
-        allRecipes.forEach(recipe => {
+        recipes.forEach(recipe => {
             // loop through ingredients
             let t;
             for (t = 0; t < recipe.ingredients.length; t++) {
@@ -57,45 +67,52 @@ fetch(recipesData)
         // make this ingredients uniq through Set
         const allIngredientsUniqSet = new Set(allIngredientsWithDoubles);
         // save uniq ingredients list in variable
-        allIngredients = Array.from(allIngredientsUniqSet);
+        activeIngredients = Array.from(allIngredientsUniqSet);
     }
-    ingredientsUniqList(allRecipes);
+    ingredientsUniqList(activeRecipes);
+    console.log('active ingredients', activeIngredients)
     /**
      * Get list of all appliances and keep uniq values
      * */
-    let allAppliances;
-    function appliancesUniqList(allRecipes) {
+    let activeAppliances;
+    function appliancesUniqList(recipes) {
         // map recipes to get appliances list
-        const appliancesWithDoubles = allRecipes.map(recipe => recipe.appliance.toLowerCase());
+        const appliancesWithDoubles = recipes.map(recipe => recipe.appliance.toLowerCase());
         // make this appliances uniq through Set
         const appliancesUniqSet = new Set(appliancesWithDoubles);
         // save uniq appliances list in variable
-        allAppliances = Array.from(appliancesUniqSet);
+        activeAppliances = Array.from(appliancesUniqSet);
     }
-    appliancesUniqList(allRecipes);
+    appliancesUniqList(activeRecipes);
     /**
      * Get list of all Utensils and keep uniq values
      * */
-    let allUtensils;
-    function utensilsUniqList(allRecipes) {
+    let allActiveUtensils;
+    function utensilsUniqList(recipes) {
         let allUtensilsWithDoubles = [];
         let i;
         // for each instance merge utensils into array
-        for (i = 0; i < allRecipes.length; i++) {
-            allUtensilsWithDoubles = allUtensilsWithDoubles.concat(allRecipes[i].ustensils);
+        for (i = 0; i < recipes.length; i++) {
+            allUtensilsWithDoubles = allUtensilsWithDoubles.concat(recipes[i].ustensils);
         }
         // make this appliances uniq through Set
         const allUtensilsUniqSet = new Set(allUtensilsWithDoubles);
         // save uniq utensils list in variable
-        allUtensils = Array.from(allUtensilsUniqSet).map(utensil => utensil.toLocaleLowerCase());
+        allActiveUtensils = Array.from(allUtensilsUniqSet).map(utensil => utensil.toLocaleLowerCase());
     }
-    utensilsUniqList(allRecipes);
+    utensilsUniqList(activeRecipes);
     /**
-     * Display recipes cards
+     * Display all recipes cards
      * */
-    allRecipes.forEach(recip => {
-        recipesContainer.innerHTML += `${recip.cardHTML()}`;
-    });
+    function displayActiveCards(recipes) {
+        recipes.forEach(recipe => {
+            if(recipe.active == true) {
+                recipesContainer.innerHTML += `${recipe.cardHTML()}`;
+            }
+        });
+    }
+    displayActiveCards(allRecipes);
+
     /**
      * Key up on search bar to suggest lists of ingredients
      * */
@@ -120,9 +137,9 @@ fetch(recipesData)
             }
         });
     }
-    keyUpGenerateSuggestions(ingredientsSearchBar, allIngredients, ingredientsSuggestionsContainer, 'ingredientTag');
-    keyUpGenerateSuggestions(appliancesSearchBar, allAppliances, appliancesSuggestionsContainer, 'applianceTag');
-    keyUpGenerateSuggestions(utensilsSearchBar, allUtensils, utensilsSuggestionsContainer, 'utensilTag');
+    keyUpGenerateSuggestions(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag');
+    keyUpGenerateSuggestions(appliancesSearchBar, activeAppliances, appliancesSuggestionsContainer, 'applianceTag');
+    keyUpGenerateSuggestions(utensilsSearchBar, allActiveUtensils, utensilsSuggestionsContainer, 'utensilTag');
     /**
      * Double Click to display Suggestion
      * */
@@ -154,9 +171,9 @@ fetch(recipesData)
             });
         }
     }
-    dblClickSuggestion(ingredientsSearchBar, allIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
-    dblClickSuggestion(appliancesSearchBar, allAppliances, appliancesSuggestionsContainer, 'applianceTag', appliances, applianceSelected, applianceSelectedBox);
-    dblClickSuggestion(utensilsSearchBar, allUtensils, utensilsSuggestionsContainer, 'utensilTag', utensils, utensilSelected, utensilSelectedBox);
+    dblClickSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
+    dblClickSuggestion(appliancesSearchBar, activeAppliances, appliancesSuggestionsContainer, 'applianceTag', appliances, applianceSelected, applianceSelectedBox);
+    dblClickSuggestion(utensilsSearchBar, allActiveUtensils, utensilsSuggestionsContainer, 'utensilTag', utensils, utensilSelected, utensilSelectedBox);
     /**
      * Click on an ingredient to display it on the top
      * */
