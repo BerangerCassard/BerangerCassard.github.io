@@ -49,6 +49,12 @@ fetch(recipesData)
 
 
     let activeRecipes = allRecipes.filter(recipe => recipe.active == true);
+    activeRecipes.forEach( recipe => {
+        recipe.ingredientTag = false;
+        recipe.applianceTag = false;
+        recipe.utensilTag = false;
+    })
+        console.log('active recipes', activeRecipes)
 
     /**
      * Get lis of all Ingredients and keep uniq values
@@ -107,12 +113,12 @@ fetch(recipesData)
      * */
     function displayActiveCards(recipes) {
         recipes.forEach(recipe => {
-            if(recipe.active == true) {
-                recipesContainer.innerHTML += `${recipe.cardHTML()}`;
+            if(recipe.active === true) {
+                recipesContainer.innerHTML += `${recipe.cardHTML()}`
             }
-        });
+        })
     }
-    displayActiveCards(allRecipes);
+    displayActiveCards(activeRecipes);
 
     /**
      * Key up on search bar to suggest lists of ingredients
@@ -193,31 +199,22 @@ fetch(recipesData)
     function closeSelection(crossElement, selectionElement, selectionBox) {
         // Click on Cross Element
         crossElement.addEventListener('click', () => {
+
+           activeRecipes.forEach(recipe => {
+
+               if(recipe.ingredientTag === true) {
+                   recipe.ingredientTag === false;
+               }
+           })
+
+            console.log('tag', tag);
             // clear Element Text
             selectionElement.innerHTML = '';
             // display none Box
             selectionBox.style.display = 'none';
             recipesContainer.innerHTML = '';
 
-            activeRecipes.forEach( recipe => {
-                if(recipe.ingredientTag == true) {
-                    recipe.ingredientTag = false
-                }
-            })
             displayActiveCards(activeRecipes);
-/*            if (ingredientSelectedBox.style.display == 'grid') {
-                recipesWithIngredient.forEach( ingredient => {
-                    recipesContainer.innerHTML += `${ingredient.cardHTML()}`
-                })
-            } else if (applianceSelectedBox.style.display == 'grid') {
-                recipesWithAppliance.forEach( appliance => {
-                    recipesContainer.innerHTML += `${appliance.cardHTML()}`
-                })
-            } else if ( utensilSelectedBox.style.display == 'grid') {
-                recipesWithUtensil.forEach( utensil => {
-                    recipesContainer.innerHTML += `${utensil.cardHTML()}`
-                })
-            }*/
         });
     }
     closeSelection(ingredientCross, ingredientSelected, ingredientSelectedBox);
@@ -266,20 +263,22 @@ fetch(recipesData)
                 // get attribute of target
                 const modifiedTitle = mutation.target.getAttribute('title');
 
-                function activateRecipesWithIngredient(recipes) {
+                function deactivateRecipesWithoutIngredient(recipes) {
                     recipes.forEach( recipe => {
-                        if(recipe.ingredients.some( element => element.ingredient.toLowerCase() == modifiedTitle)) {
+                        if(!recipe.ingredients.some( element => element.ingredient.toLowerCase() == modifiedTitle)) {
+                            recipe.active = 'none';
+                        } else {
                             recipe.ingredientTag = true
                         }
                     })
                     return recipes
                 }
-               activeRecipes =  activateRecipesWithIngredient(activeRecipes)
-                console.log('recipes with ingredient', activeRecipes.filter(recipe => recipe.ingredientTag === true))
+               activeRecipes =  deactivateRecipesWithoutIngredient(activeRecipes)
+                console.log('recipes with ingredient', activeRecipes.filter(recipe => recipe.active == true))
                 // clear container HTML
                 recipesContainer.innerHTML = '';
                 // for each recipe inject HTML in container
-                displayActiveCards(activeRecipes.filter(recipe => recipe.ingredientTag === true));
+                displayActiveCards(activeRecipes);
 
             }
         });
