@@ -32,7 +32,7 @@ fetch(recipesData)
     const utensilSelectedBox = document.getElementById('utensilSelectedTag');
     const utensilCross = document.getElementById('utensilCross');
 
-    const allRecipes = [];
+    let allRecipes = [];
     data.forEach(recipe => {
         const recipeInstance = new Recipe(recipe.id, recipe.name, recipe.servings, recipe.ingredients, recipe.time, recipe.description, recipe.appliance, recipe.ustensils);
         allRecipes.push(recipeInstance);
@@ -42,12 +42,16 @@ fetch(recipesData)
     let recipesWithUtensil
 
     /**
-     * Activate all recipes
+     * Deactivate all tags
      * */
-    function activateCards(recipes){
-        recipes.forEach(recipe => recipe.active= true);
+    function deactivateTags(recipes){
+        recipes.forEach(recipe => {
+            recipe.activeTag.ingredientTag = false;
+            recipe.activeTag.applianceTag = false;
+            recipe.activeTag.utensilTag = false;
+        });
     }
-    activateCards(allRecipes)
+    deactivateTags(allRecipes)
 
     /**
      * Manage active recipes
@@ -86,22 +90,16 @@ fetch(recipesData)
             })
         } else if(areThreeTagsTrue) {
             recipes.forEach(recipe => {
-                if(recipe.activeTag.every(tag => countTrue(tag) < 3) {
+                if(recipe.activeTag.every(tag => countTrue(tag) < 3)) {
                     recipe.active = false
                 }
             })
         }
     }
 
+    activateAndDeactivateRecipes(allRecipes);
 
-
-    let activeRecipes = allRecipes.filter(recipe => recipe.active === true);
-    activeRecipes.forEach( recipe => {
-        recipe.ingredientTag = false;
-        recipe.applianceTag = false;
-        recipe.utensilTag = false;
-    })
-        console.log('active recipes', activeRecipes)
+    console.log('active recipes', allRecipes)
 
     /**
      * Get lis of all Ingredients and keep uniq values
@@ -123,7 +121,7 @@ fetch(recipesData)
         // save uniq ingredients list in variable
         activeIngredients = Array.from(allIngredientsUniqSet);
     }
-    ingredientsUniqList(activeRecipes);
+    ingredientsUniqList(allRecipes);
 
     /**
      * Get list of all appliances and keep uniq values
@@ -137,7 +135,7 @@ fetch(recipesData)
         // save uniq appliances list in variable
         activeAppliances = Array.from(appliancesUniqSet);
     }
-    appliancesUniqList(activeRecipes);
+    appliancesUniqList(allRecipes);
     /**
      * Get list of all Utensils and keep uniq values
      * */
@@ -154,7 +152,7 @@ fetch(recipesData)
         // save uniq utensils list in variable
         allActiveUtensils = Array.from(allUtensilsUniqSet).map(utensil => utensil.toLocaleLowerCase());
     }
-    utensilsUniqList(activeRecipes);
+    utensilsUniqList(allRecipes);
     /**
      * Display all recipes cards
      * */
@@ -165,7 +163,7 @@ fetch(recipesData)
             }
         })
     }
-    displayActiveCards(activeRecipes);
+    displayActiveCards(allRecipes);
 
     /**
      * Key up on search bar to suggest lists of ingredients
@@ -247,7 +245,7 @@ fetch(recipesData)
         // Click on Cross Element
         crossElement.addEventListener('click', () => {
 
-           activeRecipes.forEach(recipe => {
+           allRecipes.forEach(recipe => {
 
                if(!recipe.ingredientTag === true && !recipe.applianceTag === true && !recipe.utensilTag === true) {
                   recipe.active = true
@@ -255,14 +253,14 @@ fetch(recipesData)
                    recipe.ingredientTag = false
                }
            })
-            console.log("active recipes", activeRecipes.filter(recipe => recipe.active === true))
+            console.log("active recipes", allRecipes.filter(recipe => recipe.active === true))
             // clear Element Text
             selectionElement.innerHTML = '';
             // display none Box
             selectionBox.style.display = 'none';
             recipesContainer.innerHTML = '';
 
-            displayActiveCards(activeRecipes);
+            displayActiveCards(allRecipes);
         });
     }
     closeSelection(ingredientCross, ingredientSelected, ingredientSelectedBox);
@@ -321,12 +319,12 @@ fetch(recipesData)
                     })
                     return recipes
                 }
-               activeRecipes =  deactivateRecipesWithoutIngredient(activeRecipes)
-                console.log('recipes with ingredient', activeRecipes.filter(recipe => recipe.active == true))
+               allRecipes =  deactivateRecipesWithoutIngredient(allRecipes)
+                console.log('recipes with ingredient', allRecipes.filter(recipe => recipe.active == true))
                 // clear container HTML
                 recipesContainer.innerHTML = '';
                 // for each recipe inject HTML in container
-                displayActiveCards(activeRecipes);
+                displayActiveCards(allRecipes);
 
             }
         });
