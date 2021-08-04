@@ -1,4 +1,5 @@
 export class Recipe {
+    activeTag = []
     /**
      *
      * @param id

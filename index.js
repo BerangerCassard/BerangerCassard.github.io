@@ -1,4 +1,6 @@
 import {Recipe} from "./src/domain/model.class.js";
+import {UtilClass} from "./src/common/util.class.js";
+
 /**
  * Fetch Json data
  * */
@@ -47,8 +49,53 @@ fetch(recipesData)
     }
     activateCards(allRecipes)
 
+    /**
+     * Manage active recipes
+     * */
+    // count how many true value in array
+    let trueCount = []
+    function countTrue (array) {
+        trueCount = []
+        let i
+        for(i=0; i<array.length; i++) {
+            if(array[i]=== true){
+                trueCount.push(array[i])
+            }
+        }
+        return trueCount.length
+    }
 
-    let activeRecipes = allRecipes.filter(recipe => recipe.active == true);
+    function activateAndDeactivateRecipes(recipes) {
+        const areAllTagsFalse = recipes.every( recipe => recipe.activeTag.every( tag => tag === false));
+        const isOneTagTrue = recipes.every( recipe => recipe.activeTag.every( tag => countTrue(tag) === 1 ));
+        const areTwoTagsTrue = recipes.every( recipe => recipe.activeTag.every( tag => countTrue(tag) === 2))
+        const areThreeTagsTrue = recipes.every( recipe => recipe.activeTag.every( tag => countTrue(tag) === 3))
+        if(areAllTagsFalse) {
+            recipes.forEach(recipe => recipe.active = true)
+        } else if(isOneTagTrue) {
+            recipes.forEach(recipe => {
+                if(recipe.activeTag.every(tag => countTrue(tag) === 0)) {
+                    recipe.active = false
+                }
+            } )
+        } else if(areTwoTagsTrue) {
+            recipes.forEach(recipe => {
+                if(recipe.activeTag.every(tag => countTrue(tag) < 2)) {
+                    recipe.active = false
+                }
+            })
+        } else if(areThreeTagsTrue) {
+            recipes.forEach(recipe => {
+                if(recipe.activeTag.every(tag => countTrue(tag) < 3) {
+                    recipe.active = false
+                }
+            })
+        }
+    }
+
+
+
+    let activeRecipes = allRecipes.filter(recipe => recipe.active === true);
     activeRecipes.forEach( recipe => {
         recipe.ingredientTag = false;
         recipe.applianceTag = false;
@@ -202,12 +249,13 @@ fetch(recipesData)
 
            activeRecipes.forEach(recipe => {
 
-               if(recipe.ingredientTag === true) {
-                   recipe.ingredientTag === false;
+               if(!recipe.ingredientTag === true && !recipe.applianceTag === true && !recipe.utensilTag === true) {
+                  recipe.active = true
+               } else if(recipe.ingredientTag === true) {
+                   recipe.ingredientTag = false
                }
            })
-
-            console.log('tag', tag);
+            console.log("active recipes", activeRecipes.filter(recipe => recipe.active === true))
             // clear Element Text
             selectionElement.innerHTML = '';
             // display none Box
