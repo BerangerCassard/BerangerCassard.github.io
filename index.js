@@ -59,8 +59,6 @@ fetch(recipesData)
      * Manage active recipes
      * */
     // count how many true value in array
-        const array = ["test", "test", "test"];
-        //console.log("test", array)
     let trueCount = []
     function countTrue (tags) {
         trueCount = []
@@ -321,18 +319,15 @@ fetch(recipesData)
                 allRecipes.forEach(recipe => recipe.ingredientTag = false);
                 // get attribute of target
                 const modifiedTitle = mutation.target.getAttribute('title');
-
                 function TagRecipesWithIngredient(recipes) {
                     recipes.forEach( recipe => {
-                        if(recipe.ingredients.some( element => element.ingredient.toLowerCase() == modifiedTitle)) {
+                        if(recipe.ingredients.some( element => element.ingredient.toLowerCase() === modifiedTitle)) {
                             recipe.activeTag.ingredientTag = true;
                         }
                     })
                     return recipes
                 }
                allRecipes =  TagRecipesWithIngredient(allRecipes);
-                console.log('recipes with ingredient', allRecipes.filter(recipe => recipe.activeTag.ingredientTag === true));
-
                allRecipes = activateAndDeactivateRecipes(allRecipes);
                 // clear container HTML
                 recipesContainer.innerHTML = '';
@@ -354,34 +349,24 @@ fetch(recipesData)
         mutations.forEach(mutation => {
             // if target affected
             if (mutation.target) {
+                // reset active appliances
+                allRecipes.forEach(recipe => recipe.applianceTag = false);
                 // get attribute of target
                 const modifiedTitle = mutation.target.getAttribute('title');
+                function TagRecipesWithAppliance(recipes) {
+                    recipes.forEach( recipe => {
+                        if(recipe.appliance.toLowerCase() === modifiedTitle) {
+                            recipe.activeTag.applianceTag = true;
+                        }
+                    })
+                    return recipes
+                }
+                allRecipes =  TagRecipesWithAppliance(allRecipes);
+                allRecipes = activateAndDeactivateRecipes(allRecipes);
                 // clear container HTML
                 recipesContainer.innerHTML = '';
-                // filter recipes with those containing the target
-                recipesWithAppliance = allRecipes
-                    .filter(recipe => recipe.appliance.toLowerCase() == modifiedTitle);
-                console.log('recipes with appliances', recipesWithAppliance)
-                // if active tag, inject html of this tag
-                let activeTagsRecipes = [];
-                if (ingredientSelectedBox.style.display == 'grid' && utensilSelectedBox.style.display == 'none') {
-                    activeTagsRecipes = recipesWithIngredient.filter(recipe => !recipesWithAppliance.includes(recipe));
-                }
-                else if (ingredientSelectedBox.style.display == 'grid' && utensilSelectedBox.style.display == 'grid') {
-                    activeTagsRecipes = recipesWithIngredient
-                        .filter(recipe => !recipesWithAppliance.includes(recipe))
-                        .filter(recipe => !recipesWithUtensil.includes(recipe))
-                        .concat(recipesWithUtensil);
-                } else if(applianceSelectedBox.style.display == 'none' && utensilSelectedBox.style.display == 'grid') {
-                    activeTagsRecipes = recipesWithUtensil.filter(recipe => !recipesWithAppliance.includes(recipe));
-                }
-                activeTagsRecipes.forEach( utensil => {
-                    recipesContainer.innerHTML += `${utensil.cardHTML()}`
-                })
                 // for each recipe inject HTML in container
-                recipesWithAppliance.forEach(recip => {
-                    recipesContainer.innerHTML += `${recip.cardHTML()}`;
-                });
+                displayActiveCards(allRecipes);
             }
         });
     });
@@ -397,34 +382,25 @@ fetch(recipesData)
         mutations.forEach(mutation => {
             // if target affected
             if (mutation.target) {
+                // reset active appliances
+                allRecipes.forEach(recipe => recipe.utensilTag = false);
                 // get attribute of target
                 const modifiedTitle = mutation.target.getAttribute('title');
+                function TagRecipesWithUtensil(recipes) {
+                    recipes.forEach( recipe => {
+                        if(recipe.ustensils.includes(modifiedTitle)) {
+                            recipe.activeTag.utensilTag = true;
+                            console.log('true', recipe)
+                        }
+                    })
+                    return recipes
+                }
+                allRecipes =  TagRecipesWithUtensil(allRecipes);
+                allRecipes = activateAndDeactivateRecipes(allRecipes);
                 // clear container HTML
                 recipesContainer.innerHTML = '';
-                // filter recipes with those that contain the target
-                recipesWithUtensil = allRecipes
-                    .filter(recipe => recipe.ustensils.includes(modifiedTitle));
-                console.log('recipes with utensils', recipesWithUtensil)
-                // if active tag, inject html of this tag
-                let activeTagsRecipes = [];
-                if (ingredientSelectedBox.style.display == 'grid' && applianceSelectedBox.style.display == 'none') {
-                    activeTagsRecipes = recipesWithIngredient.filter(recipe => !recipesWithUtensil.includes(recipe));
-                }
-                else if (ingredientSelectedBox.style.display == 'grid' && applianceSelectedBox.style.display == 'grid') {
-                    activeTagsRecipes = recipesWithIngredient
-                        .filter(recipe => !recipesWithAppliance.includes(recipe))
-                        .filter(recipe => !recipesWithUtensil.includes(recipe))
-                        .concat(recipesWithAppliance)
-                } else if(ingredientSelectedBox.style.display == 'none' && applianceSelectedBox.style.display == 'grid') {
-                    activeTagsRecipes = recipesWithAppliance.filter(recipe => !recipesWithUtensil.includes(recipe));
-                }
-                activeTagsRecipes.forEach( utensil => {
-                    recipesContainer.innerHTML += `${utensil.cardHTML()}`
-                })
                 // for each recipe inject HTML in container
-                recipesWithUtensil.forEach(recip => {
-                    recipesContainer.innerHTML += `${recip.cardHTML()}`;
-                });
+                displayActiveCards(allRecipes);
             }
         });
     });
