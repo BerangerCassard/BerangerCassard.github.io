@@ -41,6 +41,7 @@ fetch(recipesData)
     let recipesWithAppliance
     let recipesWithUtensil
 
+
     /**
      * Deactivate all tags
      * */
@@ -52,54 +53,66 @@ fetch(recipesData)
         });
     }
     deactivateTags(allRecipes)
+        console.log("all recipes", allRecipes)
 
     /**
      * Manage active recipes
      * */
     // count how many true value in array
+        const array = ["test", "test", "test"];
+        //console.log("test", array)
     let trueCount = []
-    function countTrue (array) {
+    function countTrue (tags) {
         trueCount = []
-        let i
-        for(i=0; i<array.length; i++) {
-            if(array[i]=== true){
-                trueCount.push(array[i])
+        const keys = Object.values(tags)
+        //console.log("keys", keys)
+        keys.forEach( tag => {
+            if(tag === true) {
+                trueCount.push(tag)
             }
-        }
-        return trueCount.length
+        })
+
+        return trueCount
     }
 
     function activateAndDeactivateRecipes(recipes) {
-        const areAllTagsFalse = recipes.every( recipe => recipe.activeTag.every( tag => tag === false));
-        const isOneTagTrue = recipes.every( recipe => recipe.activeTag.every( tag => countTrue(tag) === 1 ));
-        const areTwoTagsTrue = recipes.every( recipe => recipe.activeTag.every( tag => countTrue(tag) === 2))
-        const areThreeTagsTrue = recipes.every( recipe => recipe.activeTag.every( tag => countTrue(tag) === 3))
+        const areAllTagsFalse = recipes.every( recipe => countTrue(recipe.activeTag).length === 0);
+        const isOneTagTrue = recipes.some( recipe => countTrue(recipe.activeTag).length === 1);
+        const areTwoTagsTrue = recipes.some( recipe => countTrue(recipe.activeTag).length === 2);
+        const areThreeTagsTrue = recipes.every( recipe => countTrue(recipe.activeTag).length === 3)
+        console.log('true count', trueCount)
+
         if(areAllTagsFalse) {
+            console.log("all are false");
             recipes.forEach(recipe => recipe.active = true)
-        } else if(isOneTagTrue) {
+        }
+        else if(isOneTagTrue) {
+            console.log('one tag is true', trueCount);
             recipes.forEach(recipe => {
-                if(recipe.activeTag.every(tag => countTrue(tag) === 0)) {
+                if(countTrue(recipe.activeTag).length === 0) {
                     recipe.active = false
                 }
             } )
-        } else if(areTwoTagsTrue) {
+        }
+        else if(areTwoTagsTrue) {
+            console.log('two tag is true', trueCount);
             recipes.forEach(recipe => {
-                if(recipe.activeTag.every(tag => countTrue(tag) < 2)) {
+                if(countTrue(recipe.activeTag).length < 2) {
                     recipe.active = false
                 }
             })
         } else if(areThreeTagsTrue) {
+            console.log('three tag is true', trueCount);
             recipes.forEach(recipe => {
-                if(recipe.activeTag.every(tag => countTrue(tag) < 3)) {
+                if(countTrue(recipe.activeTag).length < 3) {
                     recipe.active = false
                 }
             })
         }
+        return recipes
     }
 
     activateAndDeactivateRecipes(allRecipes);
-
-    console.log('active recipes', allRecipes)
 
     /**
      * Get lis of all Ingredients and keep uniq values
@@ -309,18 +322,18 @@ fetch(recipesData)
                 // get attribute of target
                 const modifiedTitle = mutation.target.getAttribute('title');
 
-                function deactivateRecipesWithoutIngredient(recipes) {
+                function TagRecipesWithIngredient(recipes) {
                     recipes.forEach( recipe => {
-                        if(!recipe.ingredients.some( element => element.ingredient.toLowerCase() == modifiedTitle)) {
-                            recipe.active = 'none';
-                        } else {
-                            recipe.ingredientTag = true
+                        if(recipe.ingredients.some( element => element.ingredient.toLowerCase() == modifiedTitle)) {
+                            recipe.activeTag.ingredientTag = true;
                         }
                     })
                     return recipes
                 }
-               allRecipes =  deactivateRecipesWithoutIngredient(allRecipes)
-                console.log('recipes with ingredient', allRecipes.filter(recipe => recipe.active == true))
+               allRecipes =  TagRecipesWithIngredient(allRecipes);
+                console.log('recipes with ingredient', allRecipes.filter(recipe => recipe.activeTag.ingredientTag === true));
+
+               allRecipes = activateAndDeactivateRecipes(allRecipes);
                 // clear container HTML
                 recipesContainer.innerHTML = '';
                 // for each recipe inject HTML in container
