@@ -41,7 +41,6 @@ fetch(recipesData)
     let recipesWithAppliance
     let recipesWithUtensil
 
-
     /**
      * Deactivate all tags
      * */
@@ -53,60 +52,66 @@ fetch(recipesData)
         });
     }
     deactivateTags(allRecipes)
-        console.log("all recipes", allRecipes)
 
     /**
      * Manage active recipes
      * */
     // count how many true value in array
-    let trueCount = []
-    function countTrue (tags) {
-        trueCount = []
+    let trueCounterInActiveTag = []
+    function maxTrueInAnyRecipe (tags) {
+        trueCounterInActiveTag = []
         const keys = Object.values(tags)
         //console.log("keys", keys)
-        keys.forEach( tag => {
-            if(tag === true) {
-                trueCount.push(tag)
+        keys.forEach( value => {
+            if(value === true) {
+                trueCounterInActiveTag.push(value)
             }
         })
-
-        return trueCount
+        return trueCounterInActiveTag
     }
 
     function activateAndDeactivateRecipes(recipes) {
-        const areAllTagsFalse = recipes.every( recipe => countTrue(recipe.activeTag).length === 0);
-        const isOneTagTrue = recipes.some( recipe => countTrue(recipe.activeTag).length === 1);
-        const areTwoTagsTrue = recipes.some( recipe => countTrue(recipe.activeTag).length === 2);
-        const areThreeTagsTrue = recipes.every( recipe => countTrue(recipe.activeTag).length === 3)
-        console.log('true count', trueCount)
+        const areAllTagsFalse = recipes.every( recipe => maxTrueInAnyRecipe(recipe.activeTag).length === 0); // OKAY
+        console.log('areAllTagsFalse', areAllTagsFalse)
+        const isOneTagTrue = recipes.some( recipe => maxTrueInAnyRecipe(recipe.activeTag).length === 1); // OKAY
+        console.log('isOneTagTrue', isOneTagTrue)
+        const areTwoTagsTrue = recipes.some( recipe => maxTrueInAnyRecipe(recipe.activeTag).length === 2);
+        console.log('areTwoTagsTrue', areTwoTagsTrue)
+        const areThreeTagsTrue = recipes.some( recipe => maxTrueInAnyRecipe(recipe.activeTag).length === 3)
+        console.log('areThreeTagsTrue', areThreeTagsTrue)
 
         if(areAllTagsFalse) {
-            console.log("all are false");
+            console.log("all are false, trueCounterInActiveTag", trueCounterInActiveTag);
             recipes.forEach(recipe => recipe.active = true)
         }
-        else if(isOneTagTrue) {
-            console.log('one tag is true', trueCount);
+        else if(areThreeTagsTrue) {
+            console.log('three tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
             recipes.forEach(recipe => {
-                if(countTrue(recipe.activeTag).length === 0) {
+                if(maxTrueInAnyRecipe(recipe.activeTag).length < 3) {
+                    recipe.active = false
+                }
+            })
+        }
+        else if(areTwoTagsTrue) {
+            console.log('two tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
+            recipes.forEach(recipe => {
+                if(maxTrueInAnyRecipe(recipe.activeTag).length < 2) {
+                    recipe.active = false
+                }
+            })
+        }
+        else if(isOneTagTrue) {
+            console.log('found at least 1 recipe with 1 True in activeTag, true count', trueCounterInActiveTag);
+            recipes.forEach(recipe => {
+                if(maxTrueInAnyRecipe(recipe.activeTag).length === 0) {
                     recipe.active = false
                 }
             } )
         }
-        else if(areTwoTagsTrue) {
-            console.log('two tag is true', trueCount);
-            recipes.forEach(recipe => {
-                if(countTrue(recipe.activeTag).length < 2) {
-                    recipe.active = false
-                }
-            })
-        } else if(areThreeTagsTrue) {
-            console.log('three tag is true', trueCount);
-            recipes.forEach(recipe => {
-                if(countTrue(recipe.activeTag).length < 3) {
-                    recipe.active = false
-                }
-            })
+        else {
+            console.log('no condition found, maximum True found : ', trueCounterInActiveTag)
         }
+
         return recipes
     }
 
@@ -252,31 +257,72 @@ fetch(recipesData)
     /**
      * Click on Cross element effects
      * */
-    function closeSelection(crossElement, selectionElement, selectionBox) {
+    function closeSelection(crossElement, selectionElement, selectionBox, tag) {
         // Click on Cross Element
-        crossElement.addEventListener('click', () => {
-
-           allRecipes.forEach(recipe => {
-
-               if(!recipe.ingredientTag === true && !recipe.applianceTag === true && !recipe.utensilTag === true) {
-                  recipe.active = true
-               } else if(recipe.ingredientTag === true) {
-                   recipe.ingredientTag = false
-               }
-           })
-            console.log("active recipes", allRecipes.filter(recipe => recipe.active === true))
+        crossElement.addEventListener('click', (event) => {
+            allRecipes.forEach( recipe => {
+                recipe.activeTag[tag] = false
+            })
+            console.log('active tag', allRecipes.map(recipe => recipe.activeTag))
             // clear Element Text
             selectionElement.innerHTML = '';
             // display none Box
             selectionBox.style.display = 'none';
             recipesContainer.innerHTML = '';
 
+            function activateAndDeactivateRecipesWhenClosing(recipes) {
+                const areAllTagsFalse = recipes.every( recipe => maxTrueInAnyRecipe(recipe.activeTag).length === 0); // OKAY
+                console.log('areAllTagsFalse', areAllTagsFalse)
+                const isOneTagTrue = recipes.some( recipe => maxTrueInAnyRecipe(recipe.activeTag).length === 1); // OKAY
+                console.log('isOneTagTrue', isOneTagTrue)
+                const areTwoTagsTrue = recipes.some( recipe => maxTrueInAnyRecipe(recipe.activeTag).length === 2);
+                console.log('areTwoTagsTrue', areTwoTagsTrue)
+                const areThreeTagsTrue = recipes.some( recipe => maxTrueInAnyRecipe(recipe.activeTag).length === 3)
+                console.log('areThreeTagsTrue', areThreeTagsTrue)
+
+                if(areAllTagsFalse) {
+                    console.log("all are false, trueCounterInActiveTag", trueCounterInActiveTag);
+                    recipes.forEach(recipe => recipe.active = true)
+                }
+                else if(areThreeTagsTrue) {
+                    console.log('three tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
+                    recipes.forEach(recipe => {
+                        if(maxTrueInAnyRecipe(recipe.activeTag).length < 3) {
+                            recipe.active = false
+                        }
+                    })
+                }
+                else if(areTwoTagsTrue) {
+                    console.log('two tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
+                    recipes.forEach(recipe => {
+                        if(maxTrueInAnyRecipe(recipe.activeTag).length === 2) {
+                            recipe.active = true
+                        }
+                    })
+                }
+                else if(isOneTagTrue) {
+                    console.log('found at least 1 recipe with 1 True in activeTag, true count', trueCounterInActiveTag);
+                    recipes.forEach(recipe => {
+                        if(maxTrueInAnyRecipe(recipe.activeTag).length === 1 ) {
+                            recipe.active = true
+                        }
+                    } )
+                }
+                else {
+                    console.log('no condition found, maximum True found : ', trueCounterInActiveTag)
+                }
+
+                return recipes
+            }
+
+            activateAndDeactivateRecipesWhenClosing(allRecipes)
+
             displayActiveCards(allRecipes);
         });
     }
-    closeSelection(ingredientCross, ingredientSelected, ingredientSelectedBox);
-    closeSelection(applianceCross, applianceSelected, applianceSelectedBox);
-    closeSelection(utensilCross, utensilSelected, utensilSelectedBox);
+    closeSelection(ingredientCross, ingredientSelected, ingredientSelectedBox, "ingredientTag");
+    closeSelection(applianceCross, applianceSelected, applianceSelectedBox, "applianceTag");
+    closeSelection(utensilCross, utensilSelected, utensilSelectedBox, "utensilTag");
     /**
      * Focus on search bars effect
      * */
@@ -323,6 +369,7 @@ fetch(recipesData)
                     recipes.forEach( recipe => {
                         if(recipe.ingredients.some( element => element.ingredient.toLowerCase() === modifiedTitle)) {
                             recipe.activeTag.ingredientTag = true;
+                            console.log('recipe with ingredient :', recipe)
                         }
                     })
                     return recipes
@@ -357,6 +404,7 @@ fetch(recipesData)
                     recipes.forEach( recipe => {
                         if(recipe.appliance.toLowerCase() === modifiedTitle) {
                             recipe.activeTag.applianceTag = true;
+                            console.log('recipe with appliance :', recipe)
                         }
                     })
                     return recipes
@@ -390,7 +438,7 @@ fetch(recipesData)
                     recipes.forEach( recipe => {
                         if(recipe.ustensils.includes(modifiedTitle)) {
                             recipe.activeTag.utensilTag = true;
-                            console.log('true', recipe)
+                            console.log('recipe with utensil', recipe)
                         }
                     })
                     return recipes
