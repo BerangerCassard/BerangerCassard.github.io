@@ -31,15 +31,13 @@ fetch(recipesData)
     const applianceCross = document.getElementById('applianceCross');
     const utensilSelectedBox = document.getElementById('utensilSelectedTag');
     const utensilCross = document.getElementById('utensilCross');
+    const mainSearchBar = document.getElementById('searchBar');
 
     let allRecipes = [];
     data.forEach(recipe => {
         const recipeInstance = new Recipe(recipe.id, recipe.name, recipe.servings, recipe.ingredients, recipe.time, recipe.description, recipe.appliance, recipe.ustensils);
         allRecipes.push(recipeInstance);
     });
-    let recipesWithIngredient
-    let recipesWithAppliance
-    let recipesWithUtensil
 
     /**
      * Deactivate all tags
@@ -61,7 +59,6 @@ fetch(recipesData)
     function maxTrueInAnyRecipe (tags) {
         trueCounterInActiveTag = []
         const keys = Object.values(tags)
-        //console.log("keys", keys)
         keys.forEach( value => {
             if(value === true) {
                 trueCounterInActiveTag.push(value)
@@ -72,20 +69,20 @@ fetch(recipesData)
 
     function activateAndDeactivateRecipes(recipes) {
         const areAllTagsFalse = recipes.every( recipe => maxTrueInAnyRecipe(recipe.activeTag).length === 0); // OKAY
-        console.log('areAllTagsFalse', areAllTagsFalse)
+        //console.log('areAllTagsFalse', areAllTagsFalse)
         const isOneTagTrue = recipes.some( recipe => maxTrueInAnyRecipe(recipe.activeTag).length === 1); // OKAY
-        console.log('isOneTagTrue', isOneTagTrue)
+        //console.log('isOneTagTrue', isOneTagTrue)
         const areTwoTagsTrue = recipes.some( recipe => maxTrueInAnyRecipe(recipe.activeTag).length === 2);
-        console.log('areTwoTagsTrue', areTwoTagsTrue)
+        //console.log('areTwoTagsTrue', areTwoTagsTrue)
         const areThreeTagsTrue = recipes.some( recipe => maxTrueInAnyRecipe(recipe.activeTag).length === 3)
-        console.log('areThreeTagsTrue', areThreeTagsTrue)
+        //console.log('areThreeTagsTrue', areThreeTagsTrue)
 
         if(areAllTagsFalse) {
-            console.log("all are false, trueCounterInActiveTag", trueCounterInActiveTag);
+            //console.log("all are false, trueCounterInActiveTag", trueCounterInActiveTag);
             recipes.forEach(recipe => recipe.active = true)
         }
         else if(areThreeTagsTrue) {
-            console.log('three tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
+            //console.log('three tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
             recipes.forEach(recipe => {
                 if(maxTrueInAnyRecipe(recipe.activeTag).length < 3) {
                     recipe.active = false
@@ -93,7 +90,7 @@ fetch(recipesData)
             })
         }
         else if(areTwoTagsTrue) {
-            console.log('two tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
+            //console.log('two tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
             recipes.forEach(recipe => {
                 if(maxTrueInAnyRecipe(recipe.activeTag).length < 2) {
                     recipe.active = false
@@ -101,7 +98,7 @@ fetch(recipesData)
             })
         }
         else if(isOneTagTrue) {
-            console.log('found at least 1 recipe with 1 True in activeTag, true count', trueCounterInActiveTag);
+            //console.log('found at least 1 recipe with 1 True in activeTag, true count', trueCounterInActiveTag);
             recipes.forEach(recipe => {
                 if(maxTrueInAnyRecipe(recipe.activeTag).length === 0) {
                     recipe.active = false
@@ -109,7 +106,7 @@ fetch(recipesData)
             } )
         }
         else {
-            console.log('no condition found, maximum True found : ', trueCounterInActiveTag)
+            //console.log('no condition found, maximum True found : ', trueCounterInActiveTag)
         }
 
         return recipes
@@ -121,7 +118,7 @@ fetch(recipesData)
      * Get lis of all Ingredients and keep uniq values
      * */
     let activeIngredients;
-    function ingredientsUniqList(recipes) {
+    function updateIngredientsUniqList(recipes) {
         let allIngredientsWithDoubles = [];
         // for each instance...
         recipes.forEach(recipe => {
@@ -137,13 +134,13 @@ fetch(recipesData)
         // save uniq ingredients list in variable
         activeIngredients = Array.from(allIngredientsUniqSet);
     }
-    ingredientsUniqList(allRecipes);
+    updateIngredientsUniqList(allRecipes);
 
     /**
      * Get list of all appliances and keep uniq values
      * */
     let activeAppliances;
-    function appliancesUniqList(recipes) {
+    function updateAppliancesUniqList(recipes) {
         // map recipes to get appliances list
         const appliancesWithDoubles = recipes.map(recipe => recipe.appliance.toLowerCase());
         // make this appliances uniq through Set
@@ -151,12 +148,12 @@ fetch(recipesData)
         // save uniq appliances list in variable
         activeAppliances = Array.from(appliancesUniqSet);
     }
-    appliancesUniqList(allRecipes);
+    updateAppliancesUniqList(allRecipes);
     /**
      * Get list of all Utensils and keep uniq values
      * */
     let allActiveUtensils;
-    function utensilsUniqList(recipes) {
+    function updateUtensilsUniqList(recipes) {
         let allUtensilsWithDoubles = [];
         let i;
         // for each instance merge utensils into array
@@ -168,8 +165,38 @@ fetch(recipesData)
         // save uniq utensils list in variable
         allActiveUtensils = Array.from(allUtensilsUniqSet).map(utensil => utensil.toLocaleLowerCase());
     }
-    utensilsUniqList(allRecipes);
-    /**
+    updateUtensilsUniqList(allRecipes);
+
+        /**
+         * Principal Search Bar
+         * */
+        mainSearchBar.addEventListener( "keyup", ()=>  {
+            if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
+                console.log("au moins 2 caractères");
+                allRecipes.forEach(recipe => {
+                    if (recipe.name.match(mainSearchBar.value) || recipe.description.match(mainSearchBar.value) || recipe.appliance.match(mainSearchBar.value)) {
+                        recipe.active = true;
+                        console.log('plat qui correspond', recipe.name)
+                    } else {
+                        recipe.active = false
+                    }
+                    recipesContainer.innerHTML = '';
+                    displayActiveCards(allRecipes)
+                })
+            } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
+                recipesContainer.innerHTML = '';
+            } else {
+                allRecipes.forEach(recipe => {
+                    recipe.active = true;
+                    recipesContainer.innerHTML = '';
+                    displayActiveCards(allRecipes)
+                })
+            }
+            updateIngredientsUniqList(allRecipes.filter( recipe => recipe.active === true))
+
+        })
+
+        /**
      * Display all recipes cards
      * */
     function displayActiveCards(recipes) {
@@ -224,8 +251,9 @@ fetch(recipesData)
             });
         });
     }
-    function dblClickSuggestion(searchBar, elementsList, container, classAtt, elements, selection, box) {
+    function clickForSuggestion(searchBar, elementsList, container, classAtt, elements, selection, box) {
         const InputValue = searchBar.value;
+        console.log('active',elementsList.length)
         // if no input value in search bar
         if (!InputValue) {
             // double clicking...
@@ -239,9 +267,9 @@ fetch(recipesData)
             });
         }
     }
-    dblClickSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
-    dblClickSuggestion(appliancesSearchBar, activeAppliances, appliancesSuggestionsContainer, 'applianceTag', appliances, applianceSelected, applianceSelectedBox);
-    dblClickSuggestion(utensilsSearchBar, allActiveUtensils, utensilsSuggestionsContainer, 'utensilTag', utensils, utensilSelected, utensilSelectedBox);
+    clickForSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
+    clickForSuggestion(appliancesSearchBar, activeAppliances, appliancesSuggestionsContainer, 'applianceTag', appliances, applianceSelected, applianceSelectedBox);
+    clickForSuggestion(utensilsSearchBar, allActiveUtensils, utensilsSuggestionsContainer, 'utensilTag', utensils, utensilSelected, utensilSelectedBox);
     /**
      * Click on an ingredient to display it on the top
      * */
@@ -283,14 +311,6 @@ fetch(recipesData)
                 if(areAllTagsFalse) {
                     console.log("all are false, trueCounterInActiveTag", trueCounterInActiveTag);
                     recipes.forEach(recipe => recipe.active = true)
-                }
-                else if(areThreeTagsTrue) {
-                    console.log('three tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
-                    recipes.forEach(recipe => {
-                        if(maxTrueInAnyRecipe(recipe.activeTag).length < 3) {
-                            recipe.active = false
-                        }
-                    })
                 }
                 else if(areTwoTagsTrue) {
                     console.log('two tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
