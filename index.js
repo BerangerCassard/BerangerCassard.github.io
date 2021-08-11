@@ -1,6 +1,4 @@
 import {Recipe} from "./src/domain/model.class.js";
-import {UtilClass} from "./src/common/util.class.js";
-
 /**
  * Fetch Json data
  * */
@@ -80,32 +78,28 @@ fetch(recipesData)
         if(areAllTagsFalse) {
             //console.log("all are false, trueCounterInActiveTag", trueCounterInActiveTag);
             recipes.forEach(recipe => recipe.active = true)
-        }
-        else if(areThreeTagsTrue) {
+        } else if(areThreeTagsTrue) {
             //console.log('three tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
             recipes.forEach(recipe => {
                 if(maxTrueInAnyRecipe(recipe.activeTag).length < 3) {
                     recipe.active = false
                 }
             })
-        }
-        else if(areTwoTagsTrue) {
+        } else if(areTwoTagsTrue) {
             //console.log('two tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
             recipes.forEach(recipe => {
                 if(maxTrueInAnyRecipe(recipe.activeTag).length < 2) {
                     recipe.active = false
                 }
             })
-        }
-        else if(isOneTagTrue) {
+        } else if(isOneTagTrue) {
             //console.log('found at least 1 recipe with 1 True in activeTag, true count', trueCounterInActiveTag);
             recipes.forEach(recipe => {
                 if(maxTrueInAnyRecipe(recipe.activeTag).length === 0) {
                     recipe.active = false
                 }
             } )
-        }
-        else {
+        } else {
             console.log('no condition found, maximum True found : ', trueCounterInActiveTag)
         }
         return recipes
@@ -180,7 +174,11 @@ fetch(recipesData)
                 }
                 recipesContainer.innerHTML = '';
                 displayActiveCards(allRecipes)
-            })
+            });
+            removeClickForSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
+            updateIngredientsUniqList(allRecipes.filter( recipe => recipe.active === true));
+            console.log(activeIngredients.length);
+            clickForSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
         } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
             recipesContainer.innerHTML = '';
         } else {
@@ -190,10 +188,6 @@ fetch(recipesData)
                 displayActiveCards(allRecipes)
             })
         }
-        removeClickForSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
-        updateIngredientsUniqList(allRecipes.filter( recipe => recipe.active === true));
-        console.log(activeIngredients.length);
-        clickForSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
     })
 
         /**
@@ -258,7 +252,7 @@ fetch(recipesData)
         if (!InputValue) {
             // clicking...
             searchBar.addEventListener('click', () => {
-                console.log('active',elementsList.length)
+                console.log('click for suggesion listener activé',elementsList.length)
                 // for each element
                 elementsList.forEach(element => {
                     // inject HTML

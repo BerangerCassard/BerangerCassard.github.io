@@ -1,3 +1,5 @@
+import {UtilClass} from "../common/util.class.js";
+
 export class Recipe {
     activeTag = {}
     /**
@@ -40,7 +42,7 @@ export class Recipe {
     ingredientsHTML() {
         const ingredientsList = [];
         this.ingredients.forEach(ingredient => {
-            ingredientsList.push(`<p class="ingredient"><b>${ingredient.ingredient}</b>  ${ingredient.quantity}  ${ingredient.unit}</p>`);
+            ingredientsList.push(`<p class="ingredient"><b>${UtilClass.emptyIfUndefined(ingredient.ingredient)}</b>  ${UtilClass.emptyIfUndefined(ingredient.quantity)}  ${UtilClass.emptyIfUndefined(ingredient.unit)}</p>`);
         });
         return ingredientsList.join('');
     }
