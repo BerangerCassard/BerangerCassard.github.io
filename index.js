@@ -248,18 +248,21 @@ fetch(recipesData)
     function clickForSuggestion(searchBar, elementsList, container, classAtt, elements, selection, box) {
         console.log('clickForSuggestion activé')
         const InputValue = searchBar.value;
+
+        function injectHTML() {
+            console.log('click for suggesion listener activé',elementsList.length)
+            // for each element
+            elementsList.forEach(element => {
+                // inject HTML
+                container.innerHTML += `<div class="suggestion ${classAtt} sketch">${element}</div>`;
+            });
+            saveElementOnClick(elements, selection, box);
+        }
+
         // if no input value in search bar
         if (!InputValue) {
             // clicking...
-            searchBar.addEventListener('click', () => {
-                console.log('click for suggesion listener activé',elementsList.length)
-                // for each element
-                elementsList.forEach(element => {
-                    // inject HTML
-                    container.innerHTML += `<div class="suggestion ${classAtt} sketch">${element}</div>`;
-                });
-                saveElementOnClick(elements, selection, box);
-            });
+            searchBar.addEventListener('click', injectHTML);
         }
     }
     function removeClickForSuggestion(searchBar, elementsList, container, classAtt, elements, selection, box) {
