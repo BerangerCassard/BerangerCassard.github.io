@@ -29,7 +29,7 @@ export class Recipe {
             <div class="recipesList__card__image sketch"></div>
             <div class="recipesList__card__description sketch">
                 <div class="recipesList__card__description__name" class="sketch">${this.name}</div>
-                <div class="recipesList__card__description__time" class="sketch">${this.time}</div>
+                <div class="recipesList__card__description__time" class="sketch">${this.time} min</div>
                 <div class="recipesList__card__description__ingredients" class="sketch">
                     ${this.ingredientsHTML()}
                 </div>

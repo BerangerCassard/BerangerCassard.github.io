@@ -21,7 +21,7 @@
 }
 .recipesList__card {
   width: 380px;
-  height: 360px;
+  height: 364px;
   background-color: #E7E7E7;
   border-radius: 5px;
 }
@@ -104,6 +104,10 @@
   border: none;
   padding-left: 15px;
 }
+#searchBar::placeholder {
+  font-size: 18px;
+  color: #adadad;
+}
 
 .searchBar {
   display: flex;
@@ -132,11 +136,15 @@
   width: 93px;
   border: none;
 }
+.search__tagsLists__frame__input::placeholder {
+  font-size: 18px;
+}
 .search__tagsLists__frame__input:focus {
   outline: none;
 }
 .search__tagsLists__frame__input:focus::placeholder {
   color: transparent;
+  font-size: 20px;
 }
 .search__tagsLists__frame__input:focus + .search__tagsLists__frame__block::after {
   display: block;

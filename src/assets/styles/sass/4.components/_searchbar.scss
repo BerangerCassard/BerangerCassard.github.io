@@ -8,6 +8,11 @@
   border: none;
   padding-left: 15px;
   //color: black;
+
+  &::placeholder {
+    font-size: 18px;
+    color: rgb(173,173,173);
+  }
 }
 
 .searchBar {
@@ -36,11 +41,16 @@
       width: 93px;
       border: none;
 
+      &::placeholder {
+        font-size: 18px;
+      }
+
       &:focus {
         outline: none;
 
         &::placeholder {
           color: transparent;
+          font-size: 20px;
         }
 
         & +.search__tagsLists__frame__block::after {
