@@ -106,12 +106,10 @@ fetch(recipesData)
             } )
         }
         else {
-            //console.log('no condition found, maximum True found : ', trueCounterInActiveTag)
+            console.log('no condition found, maximum True found : ', trueCounterInActiveTag)
         }
-
         return recipes
     }
-
     activateAndDeactivateRecipes(allRecipes);
 
     /**
@@ -167,34 +165,36 @@ fetch(recipesData)
     }
     updateUtensilsUniqList(allRecipes);
 
-        /**
-         * Principal Search Bar
-         * */
-        mainSearchBar.addEventListener( "keyup", ()=>  {
-            if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
-                console.log("au moins 2 caractères");
-                allRecipes.forEach(recipe => {
-                    if (recipe.name.match(mainSearchBar.value) || recipe.description.match(mainSearchBar.value) || recipe.appliance.match(mainSearchBar.value)) {
-                        recipe.active = true;
-                        console.log('plat qui correspond', recipe.name)
-                    } else {
-                        recipe.active = false
-                    }
-                    recipesContainer.innerHTML = '';
-                    displayActiveCards(allRecipes)
-                })
-            } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
-                recipesContainer.innerHTML = '';
-            } else {
-                allRecipes.forEach(recipe => {
+    /**
+     * Principal Search Bar
+     * */
+    mainSearchBar.addEventListener( "keyup", ()=>  {
+        if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
+            console.log("au moins 2 caractères");
+            allRecipes.forEach(recipe => {
+                if (recipe.name.match(mainSearchBar.value) || recipe.description.match(mainSearchBar.value) || recipe.appliance.match(mainSearchBar.value)) {
                     recipe.active = true;
-                    recipesContainer.innerHTML = '';
-                    displayActiveCards(allRecipes)
-                })
-            }
-            updateIngredientsUniqList(allRecipes.filter( recipe => recipe.active === true))
-
-        })
+                    console.log('plat qui correspond', recipe.name)
+                } else {
+                    recipe.active = false
+                }
+                recipesContainer.innerHTML = '';
+                displayActiveCards(allRecipes)
+            })
+        } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
+            recipesContainer.innerHTML = '';
+        } else {
+            allRecipes.forEach(recipe => {
+                recipe.active = true;
+                recipesContainer.innerHTML = '';
+                displayActiveCards(allRecipes)
+            })
+        }
+        removeClickForSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
+        updateIngredientsUniqList(allRecipes.filter( recipe => recipe.active === true));
+        console.log(activeIngredients.length);
+        clickForSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
+    })
 
         /**
      * Display all recipes cards
@@ -252,12 +252,13 @@ fetch(recipesData)
         });
     }
     function clickForSuggestion(searchBar, elementsList, container, classAtt, elements, selection, box) {
+        console.log('clickForSuggestion activé')
         const InputValue = searchBar.value;
-        console.log('active',elementsList.length)
         // if no input value in search bar
         if (!InputValue) {
-            // double clicking...
+            // clicking...
             searchBar.addEventListener('click', () => {
+                console.log('active',elementsList.length)
                 // for each element
                 elementsList.forEach(element => {
                     // inject HTML
@@ -267,6 +268,24 @@ fetch(recipesData)
             });
         }
     }
+    function removeClickForSuggestion(searchBar, elementsList, container, classAtt, elements, selection, box) {
+            console.log('clickForSuggestion est désactivé')
+            const InputValue = searchBar.value;
+            // if no input value in search bar
+            if (!InputValue) {
+                // clicking...
+                searchBar.removeEventListener('click', () => {
+                    console.log('active',elementsList.length)
+                    // for each element
+                    elementsList.forEach(element => {
+                        // inject HTML
+                        container.innerHTML += `<div class="suggestion ${classAtt} sketch">${element}</div>`;
+                    });
+                    saveElementOnClick(elements, selection, box);
+                });
+            }
+        }
+
     clickForSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
     clickForSuggestion(appliancesSearchBar, activeAppliances, appliancesSuggestionsContainer, 'applianceTag', appliances, applianceSelected, applianceSelectedBox);
     clickForSuggestion(utensilsSearchBar, allActiveUtensils, utensilsSuggestionsContainer, 'utensilTag', utensils, utensilSelected, utensilSelectedBox);
@@ -282,6 +301,7 @@ fetch(recipesData)
     clickOnSuggestionSaveAsTag(ingredientsSearchBar, ingredients, ingredientSelected, ingredientSelectedBox);
     clickOnSuggestionSaveAsTag(appliancesSearchBar, appliances, applianceSelected, applianceSelectedBox);
     clickOnSuggestionSaveAsTag(utensilsSearchBar, utensils, utensilSelected, utensilSelectedBox);
+
     /**
      * Click on Cross element effects
      * */
