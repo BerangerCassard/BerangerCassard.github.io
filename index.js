@@ -37,6 +37,8 @@ fetch(recipesData)
         allRecipes.push(recipeInstance);
     });
 
+    let allActiveRecipes = allRecipes.filter( recipe => recipe.active === true)
+
     /**
      * Deactivate all tags
      * */
@@ -159,24 +161,40 @@ fetch(recipesData)
     }
     updateUtensilsUniqList(allRecipes);
 
+    function updateAllLists(recipes) {
+        updateIngredientsUniqList(recipes);
+        updateAppliancesUniqList(recipes);
+        updateUtensilsUniqList(recipes)
+    }
+
     /**
      * Principal Search Bar
      * */
     mainSearchBar.addEventListener( "keyup", ()=>  {
         if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
-            console.log("au moins 2 caractères");
-            allRecipes.forEach(recipe => {
-                if (recipe.name.match(mainSearchBar.value) || recipe.description.match(mainSearchBar.value) || recipe.appliance.match(mainSearchBar.value)) {
-                    recipe.active = true;
-                    console.log('plat qui correspond', recipe.name)
+            console.log('split', mainSearchBar.value.split(/[ ,]+/));
+            const resultsArray = mainSearchBar.value.split(/[ ,]+/)
+            resultsArray.forEach( result => {
+                console.log('recipe', result)
+                if(/^(?!\s*$).+/.test(result)) {
+                    console.log('not empty')
+                    allRecipes.forEach(recipe => {
+                        if (recipe.name.match(result) || recipe.description.match(result) || recipe.appliance.match(result)) {
+                            recipe.active = true;
+                            console.log('plat qui correspond', recipe.name)
+                        } else {
+                            recipe.active = false
+                        }
+                        recipesContainer.innerHTML = '';
+                        displayActiveCards(allRecipes);
+                        removeClickForAllSuggestions()
+                        updateAllLists(allRecipes.filter( recipe => recipe.active === true))
+                        clickForAllSuggestions()
+                    });
                 } else {
-                    recipe.active = false
+                    console.log('empty')
                 }
-                recipesContainer.innerHTML = '';
-                displayActiveCards(allRecipes)
-            });
-            updateIngredientsUniqList(allRecipes.filter( recipe => recipe.active === true));
-            console.log('active ingredients', activeIngredients.length);
+            })
 
         } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
             recipesContainer.innerHTML = '';
@@ -186,6 +204,7 @@ fetch(recipesData)
                 recipesContainer.innerHTML = '';
                 displayActiveCards(allRecipes)
             })
+            updateAllLists(allRecipes.filter( recipe => recipe.active === true))
         }
     })
 
@@ -244,34 +263,110 @@ fetch(recipesData)
             });
         });
     }
-    function clickForSuggestion(searchBar, elementsList, container, classAtt, elements, selection, box, removeToggle) {
-        console.log('clickForSuggestion activé')
-        const InputValue = searchBar.value;
 
-        function injectHTML() {
-            console.log('click for suggesion listener activé',elementsList.length)
-            // for each element
-            elementsList.forEach(element => {
-                // inject HTML
-                container.innerHTML += `<div class="suggestion ${classAtt} sketch">${element}</div>`;
-            });
-            saveElementOnClick(elements, selection, box);
-        }
+
+    function injectIngredientHTML() {
+        // for each element
+        activeIngredients.forEach(element => {
+            // inject HTML
+            ingredientsSuggestionsContainer.innerHTML += `<div class="suggestion ingredientTag sketch">${element}</div>`;
+        });
+        saveElementOnClick(ingredients, ingredientSelected, ingredientSelectedBox);
+    }
+
+    function clickForIngredientSuggestion() {
+        const InputValue = ingredientsSearchBar.value;
 
         // if no input value in search bar
         if (!InputValue) {
             // clicking...
-            searchBar.addEventListener('click', injectHTML);
-
-            if(removeToggle === true) {
-                searchBar.removeEventListener('click', injectHTML)
-            }
+            ingredientsSearchBar.addEventListener('click',injectIngredientHTML);
         }
     }
 
-    clickForSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox, false);
-    clickForSuggestion(appliancesSearchBar, activeAppliances, appliancesSuggestionsContainer, 'applianceTag', appliances, applianceSelected, applianceSelectedBox, false);
-    clickForSuggestion(utensilsSearchBar, allActiveUtensils, utensilsSuggestionsContainer, 'utensilTag', utensils, utensilSelected, utensilSelectedBox, false);
+    function removeClickForIngredientSuggestion() {
+        const InputValue = ingredientsSearchBar.value;
+
+        // if no input value in search bar
+        if (!InputValue) {
+            // clicking...
+            ingredientsSearchBar.removeEventListener('click',injectIngredientHTML);
+        }
+    }
+
+    function injectApplianceHTML() {
+        // for each element
+        activeAppliances.forEach(element => {
+            // inject HTML
+            appliancesSuggestionsContainer.innerHTML += `<div class="suggestion applianceTag sketch">${element}</div>`;
+        });
+        saveElementOnClick(appliances, applianceSelected, applianceSelectedBox);
+    }
+
+    function clickForApplianceSuggestion() {
+        const InputValue = appliancesSearchBar.value;
+
+        // if no input value in search bar
+        if (!InputValue) {
+            // clicking...
+            appliancesSearchBar.addEventListener('click',injectApplianceHTML);
+        }
+    }
+
+    function removeClickForApplianceSuggestion() {
+        const InputValue = appliancesSearchBar.value;
+
+        // if no input value in search bar
+        if (!InputValue) {
+            // clicking...
+            appliancesSearchBar.removeEventListener('click',injectApplianceHTML);
+        }
+    }
+
+    function injectUtensilHTML() {
+        // for each element
+        allActiveUtensils.forEach(element => {
+            // inject HTML
+            utensilsSuggestionsContainer.innerHTML += `<div class="suggestion utensilTag sketch">${element}</div>`;
+        });
+        saveElementOnClick(utensils, utensilSelected, utensilSelectedBox);
+    }
+
+    function clickForUtensilSuggestion() {
+        const InputValue = utensilsSearchBar.value;
+
+        // if no input value in search bar
+        if (!InputValue) {
+            // clicking...
+            utensilsSearchBar.addEventListener('click',injectUtensilHTML);
+        }
+    }
+
+    function removeClickForUtensilSuggestion() {
+        const InputValue = utensilsSearchBar.value;
+
+        // if no input value in search bar
+        if (!InputValue) {
+            // clicking...
+            utensilsSearchBar.removeEventListener('click',injectUtensilHTML);
+        }
+    }
+
+    function clickForAllSuggestions() {
+        clickForIngredientSuggestion();
+        clickForApplianceSuggestion();
+        clickForUtensilSuggestion()
+    }
+
+    clickForAllSuggestions()
+
+    function removeClickForAllSuggestions() {
+        removeClickForIngredientSuggestion();
+        removeClickForApplianceSuggestion();
+        removeClickForUtensilSuggestion()
+    }
+
+
     /**
      * Click on an ingredient to display it on the top
      * */
