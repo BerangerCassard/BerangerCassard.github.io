@@ -175,10 +175,9 @@ fetch(recipesData)
                 recipesContainer.innerHTML = '';
                 displayActiveCards(allRecipes)
             });
-            removeClickForSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
             updateIngredientsUniqList(allRecipes.filter( recipe => recipe.active === true));
-            console.log(activeIngredients.length);
-            clickForSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
+            console.log('active ingredients', activeIngredients.length);
+
         } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
             recipesContainer.innerHTML = '';
         } else {
@@ -245,7 +244,7 @@ fetch(recipesData)
             });
         });
     }
-    function clickForSuggestion(searchBar, elementsList, container, classAtt, elements, selection, box) {
+    function clickForSuggestion(searchBar, elementsList, container, classAtt, elements, selection, box, removeToggle) {
         console.log('clickForSuggestion activé')
         const InputValue = searchBar.value;
 
@@ -263,29 +262,16 @@ fetch(recipesData)
         if (!InputValue) {
             // clicking...
             searchBar.addEventListener('click', injectHTML);
-        }
-    }
-    function removeClickForSuggestion(searchBar, elementsList, container, classAtt, elements, selection, box) {
-            console.log('clickForSuggestion est désactivé')
-            const InputValue = searchBar.value;
-            // if no input value in search bar
-            if (!InputValue) {
-                // clicking...
-                searchBar.removeEventListener('click', () => {
-                    console.log('active',elementsList.length)
-                    // for each element
-                    elementsList.forEach(element => {
-                        // inject HTML
-                        container.innerHTML += `<div class="suggestion ${classAtt} sketch">${element}</div>`;
-                    });
-                    saveElementOnClick(elements, selection, box);
-                });
+
+            if(removeToggle === true) {
+                searchBar.removeEventListener('click', injectHTML)
             }
         }
+    }
 
-    clickForSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox);
-    clickForSuggestion(appliancesSearchBar, activeAppliances, appliancesSuggestionsContainer, 'applianceTag', appliances, applianceSelected, applianceSelectedBox);
-    clickForSuggestion(utensilsSearchBar, allActiveUtensils, utensilsSuggestionsContainer, 'utensilTag', utensils, utensilSelected, utensilSelectedBox);
+    clickForSuggestion(ingredientsSearchBar, activeIngredients, ingredientsSuggestionsContainer, 'ingredientTag', ingredients, ingredientSelected, ingredientSelectedBox, false);
+    clickForSuggestion(appliancesSearchBar, activeAppliances, appliancesSuggestionsContainer, 'applianceTag', appliances, applianceSelected, applianceSelectedBox, false);
+    clickForSuggestion(utensilsSearchBar, allActiveUtensils, utensilsSuggestionsContainer, 'utensilTag', utensils, utensilSelected, utensilSelectedBox, false);
     /**
      * Click on an ingredient to display it on the top
      * */
