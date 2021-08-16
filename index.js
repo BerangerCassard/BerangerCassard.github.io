@@ -179,6 +179,7 @@ fetch(recipesData)
                 if(/^(?!\s*$).+/.test(result)) {
                     console.log('not empty')
                     allRecipes.forEach(recipe => {
+                        console.log('test match',recipe.name.includes(result));
                         if (recipe.name.match(result) || recipe.description.match(result) || recipe.appliance.match(result)) {
                             recipe.active = true;
                             console.log('plat qui correspond', recipe.name)
