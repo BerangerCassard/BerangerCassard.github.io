@@ -47,6 +47,7 @@ fetch(recipesData)
             recipe.activeTag.ingredientTag = false;
             recipe.activeTag.applianceTag = false;
             recipe.activeTag.utensilTag = false;
+            recipe.activeTag.search = false;
         });
     }
     deactivateTags(allRecipes)
@@ -179,11 +180,12 @@ fetch(recipesData)
                 if(/^(?!\s*$).+/.test(result)) {
                     console.log('not empty')
                     allRecipes.forEach(recipe => {
-                        console.log('test match',recipe.name.includes(result));
-                        if (recipe.name.match(result) || recipe.description.match(result) || recipe.appliance.match(result)) {
+                        if (recipe.name.includes(result) || recipe.description.includes(result) || recipe.appliance.includes(result) || recipe.ustensils.includes(result) || recipe.ingredients.some(ingredient => ingredient.ingredient.includes(result))){
+                            recipe.activeTag.search = true;
                             recipe.active = true;
                             console.log('plat qui correspond', recipe.name)
                         } else {
+                            recipe.activeTag.search = false;
                             recipe.active = false
                         }
                         recipesContainer.innerHTML = '';
