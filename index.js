@@ -77,10 +77,17 @@ fetch(recipesData)
         //console.log('areTwoTagsTrue', areTwoTagsTrue)
         const areThreeTagsTrue = recipes.some( recipe => maxTrueInAnyRecipe(recipe.activeTag).length === 3)
         //console.log('areThreeTagsTrue', areThreeTagsTrue)
+        const areFourTagsTrue = recipes.some( recipe => maxTrueInAnyRecipe(recipe.activeTag).length === 4);
 
         if(areAllTagsFalse) {
             //console.log("all are false, trueCounterInActiveTag", trueCounterInActiveTag);
             recipes.forEach(recipe => recipe.active = true)
+        } else if (areFourTagsTrue) {
+            recipes.forEach(recipe => {
+                if(maxTrueInAnyRecipe(recipe.activeTag).length < 4) {
+                    recipe.active = false
+                }
+            })
         } else if(areThreeTagsTrue) {
             //console.log('three tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
             recipes.forEach(recipe => {
@@ -412,6 +419,13 @@ fetch(recipesData)
                 if(areAllTagsFalse) {
                     console.log("all are false, trueCounterInActiveTag", trueCounterInActiveTag);
                     recipes.forEach(recipe => recipe.active = true)
+                } else if(areThreeTagsTrue) {
+                    console.log('three tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
+                    recipes.forEach( recipe => {
+                        if (maxTrueInAnyRecipe(recipe.activeTag).length === 3) {
+                            recipe.active = true
+                        }
+                    })
                 }
                 else if(areTwoTagsTrue) {
                     console.log('two tag is true, trueCounterInActiveTag', trueCounterInActiveTag);
