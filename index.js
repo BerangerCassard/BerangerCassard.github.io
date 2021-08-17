@@ -207,6 +207,7 @@ fetch(recipesData)
         } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
             recipesContainer.innerHTML = '';
         } else {
+            //TODO : retravailler, afficher tout actif n'est pas la bonne solution
             allRecipes.forEach(recipe => {
                 recipe.active = true;
                 recipesContainer.innerHTML = '';
@@ -258,6 +259,7 @@ fetch(recipesData)
     /**
      * Double Click to display Suggestion
      * */
+    //TODO: autoriser uniquement 1 double click au focus
     function saveElementOnClick(elements, selection, box) {
         // for each element
         Array.from(elements).forEach(element => {
