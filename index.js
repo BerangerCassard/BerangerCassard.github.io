@@ -197,9 +197,7 @@ fetch(recipesData)
                         }
                         recipesContainer.innerHTML = '';
                         displayActiveCards(allRecipes);
-                        removeClickForAllSuggestions()
-                        updateAllLists(allRecipes.filter( recipe => recipe.active === true))
-                        clickForAllSuggestions()
+                        updateSuggestions()
                     });
                 } else {
                     console.log('empty')
@@ -376,6 +374,11 @@ fetch(recipesData)
         removeClickForUtensilSuggestion()
     }
 
+    function updateSuggestions() {
+        removeClickForAllSuggestions();
+        updateAllLists(allRecipes.filter( recipe => recipe.active === true))
+        clickForAllSuggestions()
+    }
 
     /**
      * Click on an ingredient to display it on the top
@@ -452,6 +455,10 @@ fetch(recipesData)
 
             activateAndDeactivateRecipesWhenClosing(allRecipes)
 
+            removeClickForAllSuggestions();
+            updateAllLists(allRecipes.filter( recipe => recipe.active === true));
+            clickForAllSuggestions();
+
             displayActiveCards(allRecipes);
         });
     }
@@ -511,6 +518,8 @@ fetch(recipesData)
                 }
                allRecipes =  TagRecipesWithIngredient(allRecipes);
                allRecipes = activateAndDeactivateRecipes(allRecipes);
+               updateSuggestions()
+
                 // clear container HTML
                 recipesContainer.innerHTML = '';
                 // for each recipe inject HTML in container
@@ -546,6 +555,7 @@ fetch(recipesData)
                 }
                 allRecipes =  TagRecipesWithAppliance(allRecipes);
                 allRecipes = activateAndDeactivateRecipes(allRecipes);
+                updateSuggestions()
                 // clear container HTML
                 recipesContainer.innerHTML = '';
                 // for each recipe inject HTML in container
@@ -580,6 +590,7 @@ fetch(recipesData)
                 }
                 allRecipes =  TagRecipesWithUtensil(allRecipes);
                 allRecipes = activateAndDeactivateRecipes(allRecipes);
+                updateSuggestions();
                 // clear container HTML
                 recipesContainer.innerHTML = '';
                 // for each recipe inject HTML in container
