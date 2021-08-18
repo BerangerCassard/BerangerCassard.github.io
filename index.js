@@ -37,7 +37,13 @@ fetch(recipesData)
         allRecipes.push(recipeInstance);
     });
 
-    let allActiveRecipes = allRecipes.filter( recipe => recipe.active === true)
+    function giveIndexForEachRecipe() {
+        let i
+        for(i=0; i<allRecipes.length; i++) {
+            allRecipes[i].index = i
+        }
+    }
+    giveIndexForEachRecipe()
 
     /**
      * Deactivate all tags
@@ -178,44 +184,104 @@ fetch(recipesData)
     /**
      * Principal Search Bar
      * */
-    mainSearchBar.addEventListener( "keyup", ()=>  {
-        if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
-            console.log('split', mainSearchBar.value.split(/[ ,]+/));
-            const resultsArray = mainSearchBar.value.split(/[ ,]+/)
-            resultsArray.forEach( result => {
-                console.log('recipe', result)
-                if(/^(?!\s*$).+/.test(result)) {
-                    console.log('not empty')
-                    allRecipes.forEach(recipe => {
-                        if (recipe.name.includes(result) || recipe.description.includes(result) || recipe.appliance.includes(result) || recipe.ustensils.includes(result) || recipe.ingredients.some(ingredient => ingredient.ingredient.includes(result))){
-                            recipe.activeTag.search = true;
-                            recipe.active = true;
-                            console.log('plat qui correspond', recipe.name)
-                        } else {
-                            recipe.activeTag.search = false;
-                            recipe.active = false
+
+    function searchA() {
+        mainSearchBar.addEventListener( "keyup", ()=>  {
+            if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
+                console.log('split', mainSearchBar.value.split(/[ ,]+/));
+                const resultsArray = mainSearchBar.value.split(/[ ,]+/)
+                resultsArray.forEach( result => {
+                    console.log('recipe', result)
+                    if(/^(?!\s*$).+/.test(result)) {
+                        console.log('not empty')
+                        allRecipes.forEach(recipe => {
+                            if (recipe.name.includes(result) || recipe.description.includes(result) || recipe.appliance.includes(result) || recipe.ustensils.includes(result) || recipe.ingredients.some(ingredient => ingredient.ingredient.includes(result))){
+                                recipe.activeTag.search = true;
+                                recipe.active = true;
+                                console.log('plat qui correspond', recipe.name)
+                            } else {
+                                recipe.activeTag.search = false;
+                                recipe.active = false
+                            }
+                            recipesContainer.innerHTML = '';
+                            displayActiveCards(allRecipes);
+                            updateSuggestions()
+                        });
+                    } else {
+                        console.log('empty')
+                    }
+                })
+
+            } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
+                recipesContainer.innerHTML = '';
+            } else {
+                //TODO : retravailler, afficher tout actif n'est pas la bonne solution
+                allRecipes.forEach(recipe => {
+                    recipe.active = true;
+                    recipesContainer.innerHTML = '';
+                    displayActiveCards(allRecipes)
+                })
+                updateAllLists(allRecipes.filter( recipe => recipe.active === true))
+            }
+        })
+    }
+    //searchA()
+
+
+    function searchB() {
+        const allRecipesStringify = allRecipes.map( recipe => `${recipe.index} ${JSON.stringify(recipe)}`);
+        console.log('all recipes stringify', allRecipesStringify[0])
+
+        mainSearchBar.addEventListener( "keyup", ()=>  {
+            if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
+                console.log('split', mainSearchBar.value.split(/[ ,]+/));
+                const resultsArray = mainSearchBar.value.split(/[ ,]+/)
+                resultsArray.forEach( result => {
+                    console.log('recipe', result)
+                    if(/^(?!\s*$).+/.test(result)) {
+                        console.log('not empty')
+                        const indexesActive = [];
+                        const indexesNoneActive = []
+                        let i
+                        for(i=0; i<allRecipesStringify.length; i++) {
+                            if(allRecipesStringify[i].includes(result)) {
+                                indexesActive.push(i)
+                            } else {
+                                indexesNoneActive.push(i)
+                            }
                         }
+                        indexesActive.forEach( index => {
+                            allRecipes[index].active = true;
+                            allRecipes[index].activeTag.search = true;
+                            console.log('plat qui correspond', allRecipes[index])
+                        })
+                        indexesNoneActive.forEach( index => {
+                            allRecipes[index].activeTag.search = false;
+                            allRecipes[index].active = false
+                        })
                         recipesContainer.innerHTML = '';
                         displayActiveCards(allRecipes);
                         updateSuggestions()
-                    });
-                } else {
-                    console.log('empty')
-                }
-            })
+                    } else {
+                        console.log('empty')
+                    }
+                })
 
-        } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
-            recipesContainer.innerHTML = '';
-        } else {
-            //TODO : retravailler, afficher tout actif n'est pas la bonne solution
-            allRecipes.forEach(recipe => {
-                recipe.active = true;
+            } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
                 recipesContainer.innerHTML = '';
-                displayActiveCards(allRecipes)
-            })
-            updateAllLists(allRecipes.filter( recipe => recipe.active === true))
-        }
-    })
+            } else {
+                //TODO : retravailler, afficher tout actif n'est pas la bonne solution
+                allRecipes.forEach(recipe => {
+                    recipe.active = true;
+                    recipesContainer.innerHTML = '';
+                    displayActiveCards(allRecipes)
+                })
+                updateAllLists(allRecipes.filter( recipe => recipe.active === true))
+            }
+        })
+    }
+    searchB()
+
 
         /**
      * Display all recipes cards

@@ -69,11 +69,12 @@
 }
 
 #recipesContainer {
+  width: 92%;
+  margin: 40px auto;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   row-gap: 45px;
   justify-items: center;
-  margin-top: 40px;
 }
 
 ::-webkit-scrollbar {

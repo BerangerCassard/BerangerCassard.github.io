@@ -76,11 +76,12 @@ header, .search {
 
 #recipesContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   row-gap: 45px;
   justify-items: center;
-  grid-column-gap: 4%;
-  margin-top: 40px;
+  grid-column-gap: 13%;
+  margin: 40px auto;
+  width: 92%;
 }
 
 ::-webkit-scrollbar {
