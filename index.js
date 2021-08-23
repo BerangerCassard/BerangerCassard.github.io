@@ -184,50 +184,6 @@ fetch(recipesData)
     /**
      * Principal Search Bar
      * */
-
-    function searchA() {
-        mainSearchBar.addEventListener( "keyup", ()=>  {
-            if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
-                console.log('split', mainSearchBar.value.split(/[ ,]+/));
-                const resultsArray = mainSearchBar.value.split(/[ ,]+/)
-                resultsArray.forEach( result => {
-                    console.log('recipe', result)
-                    if(/^(?!\s*$).+/.test(result)) {
-                        console.log('not empty')
-                        allRecipes.forEach(recipe => {
-                            if (recipe.name.includes(result) || recipe.description.includes(result) || recipe.appliance.includes(result) || recipe.ustensils.includes(result) || recipe.ingredients.some(ingredient => ingredient.ingredient.includes(result))){
-                                recipe.activeTag.search = true;
-                                recipe.active = true;
-                                console.log('plat qui correspond', recipe.name)
-                            } else {
-                                recipe.activeTag.search = false;
-                                recipe.active = false
-                            }
-                            recipesContainer.innerHTML = '';
-                            displayActiveCards(allRecipes);
-                            updateSuggestions()
-                        });
-                    } else {
-                        console.log('empty')
-                    }
-                })
-
-            } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
-                recipesContainer.innerHTML = '';
-            } else {
-                //TODO : retravailler, afficher tout actif n'est pas la bonne solution
-                allRecipes.forEach(recipe => {
-                    recipe.active = true;
-                    recipesContainer.innerHTML = '';
-                    displayActiveCards(allRecipes)
-                })
-                updateAllLists(allRecipes.filter( recipe => recipe.active === true))
-            }
-        })
-    }
-    //searchA()
-
-
     function searchB() {
         const allRecipesStringify = allRecipes.map( recipe => `${recipe.index} ${JSON.stringify(recipe)}`);
         console.log('all recipes stringify', allRecipesStringify[0])
