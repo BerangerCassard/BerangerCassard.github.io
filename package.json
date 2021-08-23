@@ -19,6 +19,7 @@
   "homepage": "https://github.com/BerangerCassard/Les-Petits-Plats---Js-Vanilla#readme",
   "devDependencies": {
     "@babel/cli": "^7.14.8",
+    "eslint": "^7.32.0",
     "sass": "^1.36.0"
   }
 }

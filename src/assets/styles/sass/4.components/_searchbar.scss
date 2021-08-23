@@ -58,7 +58,10 @@
         outline: none;
 
         &::placeholder {
-          color: transparent;
+          position: relative;
+          left: -11px;
+          top: 3px;
+          color: rgba(255, 255, 255, 0.5);
           font-size: 20px;
         }
 
@@ -121,6 +124,7 @@
     padding-left: 10px;
     border-radius: 5px;
     cursor: pointer;
+    margin: 2px 0;
   }
 
 

@@ -670,4 +670,55 @@ fetch(recipesData)
     utensilMutations.observe(utensilSelected, {
         attributes: true
     });
+
+    /**
+     * Design
+     * */
+
+    function modifyPlaceholderIngredientsSearchbar() {
+        ingredientsSearchBar.addEventListener('focus', ()=> {
+            ingredientsSearchBar.placeholder = "Recherchez un ingredient";
+            ingredientsSearchBar.placeholder.style.color = "rgba(255, 255, 255, 0.5)"
+        })
+
+        document.addEventListener('click', (event)=> {
+            if (!ingredientsSearchBar.contains(event.target)) {
+                ingredientsSearchBar.placeholder = "Ingrédients "
+
+            }
+        })
+    }
+    modifyPlaceholderIngredientsSearchbar();
+
+    function  modifyPlaceholderApplianceSearchbar() {
+        appliancesSearchBar.addEventListener('focus', ()=> {
+            appliancesSearchBar.placeholder = "Recherchez un appareil";
+            appliancesSearchBar.placeholder.style.color = "rgba(255, 255, 255, 0.5)";
+        })
+
+        document.addEventListener('click', (event)=> {
+            if (!appliancesSearchBar.contains(event.target)) {
+                appliancesSearchBar.placeholder = "Appareils "
+
+            }
+        })
+    }
+    modifyPlaceholderApplianceSearchbar();
+
+        function  modifyPlaceholderUtensilsSearchbar() {
+            utensilsSearchBar.addEventListener('focus', ()=> {
+                utensilsSearchBar.placeholder = "Recherchez un ustensil";
+                utensilsSearchBar.placeholder.style.color = "rgba(255, 255, 255, 0.5)";
+            })
+
+            document.addEventListener('click', (event)=> {
+                if (!utensilsSearchBar.contains(event.target)) {
+                    utensilsSearchBar.placeholder = "Ustensils "
+
+                }
+            })
+        }
+        modifyPlaceholderUtensilsSearchbar();
+
+
 });

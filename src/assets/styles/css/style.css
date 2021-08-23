@@ -159,7 +159,10 @@ header, .search {
   outline: none;
 }
 .search__tagsLists__frame__input:focus::placeholder {
-  color: transparent;
+  position: relative;
+  left: -11px;
+  top: 3px;
+  color: rgba(255, 255, 255, 0.5);
   font-size: 20px;
 }
 .search__tagsLists__frame__input:focus + .search__tagsLists__frame__block::after {
@@ -210,6 +213,7 @@ header, .search {
   padding-left: 10px;
   border-radius: 5px;
   cursor: pointer;
+  margin: 2px 0;
 }
 .search__tagsLists #searchIngredient {
   background-color: #3282F7;
