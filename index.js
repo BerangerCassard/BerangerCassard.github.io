@@ -186,14 +186,13 @@ fetch(recipesData)
      * */
     function searchAlternative() {
         const allRecipesStringify = allRecipes.map( recipe => `${recipe.index} ${JSON.stringify(recipe)}`);
-        console.log('all recipes stringify', allRecipesStringify[0])
 
         mainSearchBar.addEventListener( "keyup", ()=>  {
             if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
                 console.log('split', mainSearchBar.value.split(/[ ,]+/));
                 const resultsArray = mainSearchBar.value.split(/[ ,]+/)
                 resultsArray.forEach( result => {
-                    console.time()
+                    console.time("method 1")
                     console.log('recipe', result)
                     if(/^(?!\s*$).+/.test(result)) {
                         console.log('not empty')
@@ -222,7 +221,7 @@ fetch(recipesData)
                     } else {
                         console.log('empty')
                     }
-            console.timeLog()
+            console.timeEnd("method 1")
                 })
 
             } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
