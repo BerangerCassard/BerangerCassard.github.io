@@ -1,4 +1,5 @@
 import {Recipe} from "./src/domain/model.class.js";
+import {UtilClass} from "./src/common/util.class.js";
 /**
  * Fetch Json data
  * */
@@ -140,7 +141,7 @@ fetch(recipesData)
         // make this ingredients uniq through Set
         const allIngredientsUniqSet = new Set(allIngredientsWithDoubles);
         // save uniq ingredients list in variable
-        activeIngredients = Array.from(allIngredientsUniqSet);
+        activeIngredients = Array.from(allIngredientsUniqSet).map(ingredient => UtilClass.UppercaseFirst(ingredient))
     }
     updateIngredientsUniqList(allRecipes);
 
@@ -154,7 +155,7 @@ fetch(recipesData)
         // make this appliances uniq through Set
         const appliancesUniqSet = new Set(appliancesWithDoubles);
         // save uniq appliances list in variable
-        activeAppliances = Array.from(appliancesUniqSet);
+        activeAppliances = Array.from(appliancesUniqSet).map(appliance => UtilClass.UppercaseFirst(appliance));
     }
     updateAppliancesUniqList(allRecipes);
     /**
@@ -171,7 +172,9 @@ fetch(recipesData)
         // make this appliances uniq through Set
         const allUtensilsUniqSet = new Set(allUtensilsWithDoubles);
         // save uniq utensils list in variable
-        allActiveUtensils = Array.from(allUtensilsUniqSet).map(utensil => utensil.toLocaleLowerCase());
+        allActiveUtensils = Array.from(allUtensilsUniqSet)
+            /*.map(utensil => utensil.toLocaleLowerCase())*/
+            .map(utensil => UtilClass.UppercaseFirst(utensil));
     }
     updateUtensilsUniqList(allRecipes);
 
@@ -325,13 +328,13 @@ fetch(recipesData)
     keyUpGenerateSuggestions(appliancesSearchBar, activeAppliances, appliancesSuggestionsContainer, 'applianceTag');
     keyUpGenerateSuggestions(utensilsSearchBar, allActiveUtensils, utensilsSuggestionsContainer, 'utensilTag');
     /**
-     * Double Click to display Suggestion
+     * Focus to display Suggestion
      * */
     //TODO: autoriser uniquement 1 double click au focus
     function saveElementOnClick(elements, selection, box) {
         // for each element
         Array.from(elements).forEach(element => {
-            element.addEventListener('click', (event) => {
+            element.addEventListener('focus', (event) => {
                 // selection text equal to element clicked
                 selection.innerHTML = `${element.innerHTML}`;
                 // set title attribute equal to text
@@ -722,6 +725,5 @@ fetch(recipesData)
             })
         }
         modifyPlaceholderUtensilsSearchbar();
-
 
 });

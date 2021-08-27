@@ -44,7 +44,7 @@ export class Recipe {
     ingredientsHTML() {
         const ingredientsList = [];
         this.ingredients.forEach(ingredient => {
-            ingredientsList.push(`<p class="ingredient"><b>${UtilClass.emptyIfUndefined(ingredient.ingredient)}</b>  ${UtilClass.emptyIfUndefined(ingredient.quantity)}  ${UtilClass.emptyIfUndefined(ingredient.unit)}</p>`);
+            ingredientsList.push(`<p class="ingredient"><b>${UtilClass.emptyIfUndefined(ingredient.ingredient)}</b>: ${UtilClass.emptyIfUndefined(ingredient.quantity)}  ${UtilClass.emptyIfUndefined(ingredient.unit)}</p>`);
         });
         return ingredientsList.join('');
     }
