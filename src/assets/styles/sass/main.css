@@ -6,7 +6,7 @@
 }
 
 * {
-  font-family: lato;
+  font-family: lato, serif !important;
   font-size: 12px;
 }
 * p {

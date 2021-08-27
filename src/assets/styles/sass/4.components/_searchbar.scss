@@ -39,7 +39,7 @@
 
 .search__tagsLists {
   display: flex;
-  gap: 1%;
+  gap: 2%;
 
   &__frame {
     display: flex;
@@ -49,8 +49,10 @@
       color: white;
       border-radius: 5px 0 0 5px;
       padding-left: 10px;
+      padding-right: 10px;
       width: 105px;
       border: none;
+      font-weight: 700;
 
       &::placeholder {
         font-size: 16px !important;
@@ -91,7 +93,7 @@
 
     &__block {
       border-radius: 0 5px 5px 0;
-      width: 30px;
+      width: 40px;
 
       &::after {
         font-family: "Font Awesome 5 Free";
@@ -111,7 +113,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     overflow-wrap: break-word;
-    max-width: 442px;
+    max-width: 460px;
     max-height: 200px;
     overflow: auto;
     color: white;
