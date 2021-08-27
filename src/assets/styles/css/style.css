@@ -40,21 +40,20 @@ header, .search {
 .recipesList__card__title {
   border-radius: 0 0 5px 5px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 2fr;
+  grid-template-columns: 3fr 1fr;
   justify-content: center;
   padding: 0 10px;
-  height: 178px;
+  height: 50px;
   column-gap: 5px;
 }
 .recipesList__card__title__name {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
   align-self: center;
   justify-self: left;
 }
 .recipesList__card__title__time {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   align-self: center;
   justify-self: right;
@@ -68,10 +67,20 @@ header, .search {
   position: relative;
   top: 1px;
 }
-.recipesList__card__title__process {
+.recipesList__card__description {
+  border-radius: 0 0 5px 5px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  padding: 0 10px;
+  height: 50px;
+  column-gap: 7%;
+}
+.recipesList__card__description__process {
   line-height: 13px;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 105px;
 }
 
 #recipesContainer {

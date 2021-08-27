@@ -25,20 +25,19 @@ export class Recipe {
     }
     cardHTML() {
         return `
-                <div class="recipesList__card sketch">
+        <div class="recipesList__card sketch">
             <div class="recipesList__card__image sketch"></div>
             <div class="recipesList__card__title sketch">
                 <div class="recipesList__card__title__name" class="sketch">${this.name}</div>
                 <div class="recipesList__card__title__time" class="sketch">${this.time} min</div>
-            <div>
+            </div>
+            <div class="recipesList__card__description">
                  <div class="recipesList__card__description__ingredients" class="sketch">
                     ${this.ingredientsHTML()}
                 </div>
                 <div class="recipesList__card__description__process" >
                     ${this.description}
                 </div>
-            </div>
-
             </div>
         </div>`;
     }
