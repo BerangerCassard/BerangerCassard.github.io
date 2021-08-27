@@ -184,6 +184,51 @@ fetch(recipesData)
     /**
      * Principal Search Bar
      * */
+    function searchA() {
+        mainSearchBar.addEventListener( "keyup", ()=>  {
+            if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
+                console.log('split', mainSearchBar.value.split(/[ ,]+/));
+                const resultsArray = mainSearchBar.value.split(/[ ,]+/)
+                resultsArray.forEach( result => {
+                    console.time('method 1');
+                    console.log('recipe', result)
+                    if(/^(?!\s*$).+/.test(result)) {
+                        allRecipes.forEach(recipe => {
+                            if (recipe.name.includes(result) || recipe.description.includes(result) || recipe.appliance.includes(result) || recipe.ustensils.includes(result) || recipe.ingredients.some(ingredient => ingredient.ingredient.includes(result))){
+                                recipe.activeTag.search = true;
+                                recipe.active = true;
+                                console.log('plat qui correspond', recipe.name)
+                            } else {
+                                recipe.activeTag.search = false;
+                                recipe.active = false
+                            }
+                            recipesContainer.innerHTML = '';
+                            displayActiveCards(allRecipes);
+                            updateSuggestions()
+                        });
+                    } else {
+                        console.log('empty')
+                    }
+                    console.timeEnd('method 1')
+                })
+
+            } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
+                recipesContainer.innerHTML = '';
+                displayActiveCards(allRecipes)
+            } else {
+                //TODO : faire des tests
+                allRecipes.forEach(recipe => {
+                    recipe.activeTag.search = false
+                })
+                recipesContainer.innerHTML = '';
+                allRecipes = activateAndDeactivateRecipes(allRecipes)
+                displayActiveCards(allRecipes)
+                updateAllLists(allRecipes.filter( recipe => recipe.active === true))
+            }
+        })
+    }
+        searchA()
+
     function searchAlternative() {
         const allRecipesStringify = allRecipes.map( recipe => `${recipe.index} ${JSON.stringify(recipe)}`);
 
@@ -237,7 +282,7 @@ fetch(recipesData)
             }
         })
     }
-    searchAlternative()
+    //searchAlternative()
 
 
         /**
@@ -635,7 +680,8 @@ fetch(recipesData)
     function modifyPlaceholderIngredientsSearchbar() {
         ingredientsSearchBar.addEventListener('focus', ()=> {
             ingredientsSearchBar.placeholder = "Recherchez un ingredient";
-            ingredientsSearchBar.placeholder.style.color = "rgba(255, 255, 255, 0.5)"
+            console.log('ingredient placeholder', ingredientsSearchBar.placeholder);
+            //ingredientsSearchBar.placeholder.style.color = "rgba(255, 255, 255, 0.5)"
         })
 
         document.addEventListener('click', (event)=> {
@@ -650,7 +696,7 @@ fetch(recipesData)
     function  modifyPlaceholderApplianceSearchbar() {
         appliancesSearchBar.addEventListener('focus', ()=> {
             appliancesSearchBar.placeholder = "Recherchez un appareil";
-            appliancesSearchBar.placeholder.style.color = "rgba(255, 255, 255, 0.5)";
+            //appliancesSearchBar.placeholder.style.color = "rgba(255, 255, 255, 0.5)";
         })
 
         document.addEventListener('click', (event)=> {
@@ -665,7 +711,7 @@ fetch(recipesData)
         function  modifyPlaceholderUtensilsSearchbar() {
             utensilsSearchBar.addEventListener('focus', ()=> {
                 utensilsSearchBar.placeholder = "Recherchez un ustensil";
-                utensilsSearchBar.placeholder.style.color = "rgba(255, 255, 255, 0.5)";
+                //utensilsSearchBar.placeholder.style.color = "rgba(255, 255, 255, 0.5)";
             })
 
             document.addEventListener('click', (event)=> {
