@@ -361,7 +361,7 @@ fetch(recipesData)
         // if no input value in search bar
         if (!InputValue) {
             // clicking...
-            ingredientsSearchBar.addEventListener('click',injectIngredientHTML);
+            ingredientsSearchBar.addEventListener('focus',injectIngredientHTML);
         }
     }
 
@@ -390,7 +390,7 @@ fetch(recipesData)
         // if no input value in search bar
         if (!InputValue) {
             // clicking...
-            appliancesSearchBar.addEventListener('click',injectApplianceHTML);
+            appliancesSearchBar.addEventListener('focus',injectApplianceHTML);
         }
     }
 
@@ -419,7 +419,7 @@ fetch(recipesData)
         // if no input value in search bar
         if (!InputValue) {
             // clicking...
-            utensilsSearchBar.addEventListener('click',injectUtensilHTML);
+            utensilsSearchBar.addEventListener('focus',injectUtensilHTML);
         }
     }
 
@@ -683,15 +683,10 @@ fetch(recipesData)
     function modifyPlaceholderIngredientsSearchbar() {
         ingredientsSearchBar.addEventListener('focus', ()=> {
             ingredientsSearchBar.placeholder = "Recherchez un ingredient";
-            console.log('ingredient placeholder', ingredientsSearchBar.placeholder);
             //ingredientsSearchBar.placeholder.style.color = "rgba(255, 255, 255, 0.5)"
         })
-
-        document.addEventListener('click', (event)=> {
-            if (!ingredientsSearchBar.contains(event.target)) {
-                ingredientsSearchBar.placeholder = "Ingrédients "
-
-            }
+        ingredientsSearchBar.addEventListener('blur', ()=> {
+            ingredientsSearchBar.placeholder = "Ingrédients";
         })
     }
     modifyPlaceholderIngredientsSearchbar();
@@ -701,12 +696,9 @@ fetch(recipesData)
             appliancesSearchBar.placeholder = "Recherchez un appareil";
             //appliancesSearchBar.placeholder.style.color = "rgba(255, 255, 255, 0.5)";
         })
-
-        document.addEventListener('click', (event)=> {
-            if (!appliancesSearchBar.contains(event.target)) {
-                appliancesSearchBar.placeholder = "Appareils "
-
-            }
+        appliancesSearchBar.addEventListener('blur', ()=> {
+            appliancesSearchBar.placeholder = "Appareils";
+            //appliancesSearchBar.placeholder.style.color = "rgba(255, 255, 255, 0.5)";
         })
     }
     modifyPlaceholderApplianceSearchbar();
@@ -716,13 +708,11 @@ fetch(recipesData)
                 utensilsSearchBar.placeholder = "Recherchez un ustensil";
                 //utensilsSearchBar.placeholder.style.color = "rgba(255, 255, 255, 0.5)";
             })
-
-            document.addEventListener('click', (event)=> {
-                if (!utensilsSearchBar.contains(event.target)) {
-                    utensilsSearchBar.placeholder = "Ustensils "
-
-                }
+            utensilsSearchBar.addEventListener('blur', ()=> {
+                utensilsSearchBar.placeholder = "Ustensils";
+                //utensilsSearchBar.placeholder.style.color = "rgba(255, 255, 255, 0.5)";
             })
+
         }
         modifyPlaceholderUtensilsSearchbar();
 

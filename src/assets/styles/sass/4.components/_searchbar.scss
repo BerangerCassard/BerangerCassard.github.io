@@ -14,7 +14,7 @@
 
   &::placeholder {
     position: relative;
-    top: 2px;
+    top: 1px;
     font-size: 16px;
     color: rgb(173,173,173);
   }
@@ -64,7 +64,7 @@
         &::placeholder {
           position: relative;
           left: -11px;
-          top: 3px;
+          top: 1px;
           color: rgba(255, 255, 255, 0.5);
           font-size: 16px;
         }
