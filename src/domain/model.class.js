@@ -27,15 +27,18 @@ export class Recipe {
         return `
                 <div class="recipesList__card sketch">
             <div class="recipesList__card__image sketch"></div>
-            <div class="recipesList__card__description sketch">
-                <div class="recipesList__card__description__name" class="sketch">${this.name}</div>
-                <div class="recipesList__card__description__time" class="sketch">${this.time} min</div>
-                <div class="recipesList__card__description__ingredients" class="sketch">
+            <div class="recipesList__card__title sketch">
+                <div class="recipesList__card__title__name" class="sketch">${this.name}</div>
+                <div class="recipesList__card__title__time" class="sketch">${this.time} min</div>
+            <div>
+                 <div class="recipesList__card__description__ingredients" class="sketch">
                     ${this.ingredientsHTML()}
                 </div>
                 <div class="recipesList__card__description__process" >
                     ${this.description}
                 </div>
+            </div>
+
             </div>
         </div>`;
     }

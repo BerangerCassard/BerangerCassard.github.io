@@ -2,10 +2,10 @@
 .bloc {
   width: 90%;
   margin: auto;
+  max-width: 1280px;
 }
 
 header, .search {
-  width: 92%;
   margin: auto;
 }
 
@@ -37,7 +37,7 @@ header, .search {
   width: 380px;
   height: 178px;
 }
-.recipesList__card__description {
+.recipesList__card__title {
   border-radius: 0 0 5px 5px;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -47,19 +47,19 @@ header, .search {
   height: 178px;
   column-gap: 5px;
 }
-.recipesList__card__description__name {
+.recipesList__card__title__name {
   font-size: 18px;
   font-weight: 400;
   align-self: center;
   justify-self: left;
 }
-.recipesList__card__description__time {
+.recipesList__card__title__time {
   font-size: 18px;
   font-weight: 700;
   align-self: center;
   justify-self: right;
 }
-.recipesList__card__description__time::before {
+.recipesList__card__title__time::before {
   font-family: "Font Awesome 5 Free";
   font-weight: 400;
   content: "";
@@ -68,7 +68,7 @@ header, .search {
   position: relative;
   top: 1px;
 }
-.recipesList__card__description__process {
+.recipesList__card__title__process {
   line-height: 13px;
   overflow: hidden;
   text-overflow: ellipsis;
