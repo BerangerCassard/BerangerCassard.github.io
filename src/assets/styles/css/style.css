@@ -217,15 +217,13 @@ header, .search {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   overflow-wrap: break-word;
-  max-width: 460px;
+  width: 460px;
   max-height: 200px;
   overflow: auto;
   color: white;
   margin: auto;
   row-gap: 3px;
   border-radius: 0 0 5px 5px;
-  position: relative;
-  top: -4px;
 }
 .search__tagsLists .suggestion {
   padding-left: 10px;
@@ -271,6 +269,25 @@ header, .search {
 }
 .search__tagsLists #utensilArrowBloc {
   background-color: #ED6454;
+}
+
+#ingredientsSuggestions {
+  position: absolute;
+  top: 66px;
+}
+
+#appareilsSuggestions {
+  position: absolute;
+  top: 289px;
+}
+
+#utensilsSuggestions {
+  position: absolute;
+  top: 289px;
+}
+
+#ingredientsContainer {
+  position: relative;
 }
 
 .search__checkedTags {
