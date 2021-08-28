@@ -230,7 +230,7 @@ fetch(recipesData)
             }
         })
     }
-        searchA()
+    searchA()
 
     function searchAlternative() {
         const allRecipesStringify = allRecipes.map( recipe => `${recipe.index} ${JSON.stringify(recipe)}`);
@@ -330,11 +330,10 @@ fetch(recipesData)
     /**
      * Focus to display Suggestion
      * */
-    //TODO: autoriser uniquement 1 double click au focus
     function saveElementOnClick(elements, selection, box) {
         // for each element
         Array.from(elements).forEach(element => {
-            element.addEventListener('focus', (event) => {
+            element.addEventListener('click', (event) => {
                 // selection text equal to element clicked
                 selection.innerHTML = `${element.innerHTML}`;
                 // set title attribute equal to text
@@ -560,7 +559,7 @@ fetch(recipesData)
                 // clear search bar value
                 searchBar.value = '';
                 // reset sear bar size to initial
-                searchBar.style.width = '93px';
+                searchBar.style.width = '105px';
             }
         });
     }
@@ -579,7 +578,7 @@ fetch(recipesData)
                 // reset active ingredients
                 allRecipes.forEach(recipe => recipe.ingredientTag = false);
                 // get attribute of target
-                const modifiedTitle = mutation.target.getAttribute('title');
+                const modifiedTitle = mutation.target.getAttribute('title').toLowerCase();
                 function TagRecipesWithIngredient(recipes) {
                     recipes.forEach( recipe => {
                         if(recipe.ingredients.some( element => element.ingredient.toLowerCase() === modifiedTitle)) {
@@ -616,7 +615,7 @@ fetch(recipesData)
                 // reset active appliances
                 allRecipes.forEach(recipe => recipe.applianceTag = false);
                 // get attribute of target
-                const modifiedTitle = mutation.target.getAttribute('title');
+                const modifiedTitle = mutation.target.getAttribute('title').toLowerCase();
                 function TagRecipesWithAppliance(recipes) {
                     recipes.forEach( recipe => {
                         if(recipe.appliance.toLowerCase() === modifiedTitle) {
@@ -651,7 +650,7 @@ fetch(recipesData)
                 // reset active appliances
                 allRecipes.forEach(recipe => recipe.utensilTag = false);
                 // get attribute of target
-                const modifiedTitle = mutation.target.getAttribute('title');
+                const modifiedTitle = mutation.target.getAttribute('title').toLowerCase();
                 function TagRecipesWithUtensil(recipes) {
                     recipes.forEach( recipe => {
                         if(recipe.ustensils.includes(modifiedTitle)) {
