@@ -31,6 +31,7 @@ fetch(recipesData)
     const utensilSelectedBox = document.getElementById('utensilSelectedTag');
     const utensilCross = document.getElementById('utensilCross');
     const mainSearchBar = document.getElementById('searchBar');
+    const message = document.getElementById("message");
 
     let allRecipes = [];
     data.forEach(recipe => {
@@ -190,17 +191,16 @@ fetch(recipesData)
     function searchA() {
         mainSearchBar.addEventListener( "keyup", ()=>  {
             if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
-                console.log('split', mainSearchBar.value.split(/[ ,]+/));
+                //console.log('split', mainSearchBar.value.split(/[ ,]+/));
                 const resultsArray = mainSearchBar.value.split(/[ ,]+/)
                 resultsArray.forEach( result => {
-                    console.time('method 1');
-                    console.log('recipe', result)
+                    //console.log('recipe', result)
                     if(/^(?!\s*$).+/.test(result)) {
                         allRecipes.forEach(recipe => {
                             if (recipe.name.includes(result) || recipe.description.includes(result) || recipe.appliance.includes(result) || recipe.ustensils.includes(result) || recipe.ingredients.some(ingredient => ingredient.ingredient.includes(result))){
                                 recipe.activeTag.search = true;
                                 recipe.active = true;
-                                console.log('plat qui correspond', recipe.name)
+                                //console.log('plat qui correspond', recipe.name)
                             } else {
                                 recipe.activeTag.search = false;
                                 recipe.active = false
@@ -209,10 +209,16 @@ fetch(recipesData)
                             displayActiveCards(allRecipes);
                             updateSuggestions()
                         });
+                        if(allRecipes.every( recipe => recipe.activeTag.search === false)) {
+                            message.style.display = "block";
+                            function displayNoneMessage() {
+                                message.style.display = "none"
+                            }
+                            setTimeout(displayNoneMessage, 3000)
+                        }
                     } else {
                         console.log('empty')
                     }
-                    console.timeEnd('method 1')
                 })
 
             } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
@@ -714,5 +720,9 @@ fetch(recipesData)
 
         }
         modifyPlaceholderUtensilsSearchbar();
+
+
+
+
 
 });

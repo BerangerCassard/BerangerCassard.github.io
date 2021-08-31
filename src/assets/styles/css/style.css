@@ -298,6 +298,12 @@ header, .search {
   position: relative;
 }
 
+#message {
+  display: none;
+  margin-top: 28px;
+  font-size: 16px;
+}
+
 .search__checkedTags {
   display: flex;
   gap: 2%;
@@ -317,6 +323,7 @@ header, .search {
   justify-self: right;
   font-size: 20px;
   width: 20px;
+  cursor: pointer;
 }
 
 #ingredientSelectTag {
