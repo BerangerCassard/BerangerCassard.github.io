@@ -192,14 +192,20 @@
 
 #appareilsSuggestions {
   position: absolute;
-  top: 289px;
+  top: 66px;
 }
 
 #utensilsSuggestions {
   position: absolute;
-  top: 289px;
+  top: 66px;
 }
 
 #ingredientsContainer {
+  position: relative;
+}
+#appliancesContainer {
+  position: relative;
+}
+#utensilsContainer {
   position: relative;
 }
