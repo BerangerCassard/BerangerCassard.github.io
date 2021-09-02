@@ -39,14 +39,6 @@ fetch(recipesData)
         allRecipes.push(recipeInstance);
     });
 
-    function giveIndexForEachRecipe() {
-        let i
-        for(i=0; i<allRecipes.length; i++) {
-            allRecipes[i].index = i
-        }
-    }
-    giveIndexForEachRecipe()
-
     /**
      * Deactivate all tags
      * */
@@ -199,7 +191,6 @@ fetch(recipesData)
                         allRecipes
                             .filter(recipe => recipe.active === true)
                             .forEach(recipe => {
-                                //console.log(recipe.ingredients.map(element => element.ingredient.toLowerCase()))
                             if (recipe.name.toLowerCase().includes(result)
                                 || recipe.description.includes(result)
                                 || recipe.appliance.toLowerCase().includes(result)
@@ -230,7 +221,8 @@ fetch(recipesData)
                     }
                 })
 
-            } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
+            } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i)
+                || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
                 recipesContainer.innerHTML = '';
                 displayActiveCards(allRecipes)
             } else {
@@ -244,37 +236,53 @@ fetch(recipesData)
             }
         })
     }
-    searchA()
+    //searchA()
 
     function searchAlternative() {
         mainSearchBar.addEventListener( "keyup", ()=>  {
             if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
-                const allRecipesStringify = allRecipes.map( recipe => `${recipe.index} ${JSON.stringify(recipe)}`);
+                const allRecipesStringify = allRecipes
+                    .filter( recipe => recipe.active === true)
+                    .map( recipe => `${recipe.id} ${JSON.stringify(recipe).toLowerCase()}`);
                 const resultsArray = mainSearchBar.value.split(/[ ,]+/)
                 resultsArray.forEach( result => {
                     //console.log('recipe', result)
                     // check if not empty
                     if(/^(?!\s*$).+/.test(result)) {
                         //console.log('not empty')
-                        const indexesActive = [];
-                        const indexesNoneActive = []
+                        let indexesActive = [];
+                        let indexesNoneActive = []
                         let i
                         for(i=0; i<allRecipesStringify.length; i++) {
                             if(allRecipesStringify[i].includes(result)) {
-                                indexesActive.push(i)
+                                indexesActive.push(allRecipesStringify[i].charAt(0)+allRecipesStringify[i].charAt(1));
                             } else {
-                                indexesNoneActive.push(i)
+                                indexesNoneActive.push(allRecipesStringify[i].charAt(0)+allRecipesStringify[i].charAt(1))
                             }
                         }
+                        indexesActive = indexesActive.map(index => index.replace(/\s+/g, ''));
+                        indexesNoneActive = indexesNoneActive.map(index => index.replace(/\s+/g, ''));
+                        //console.log('indexes non active',indexesNoneActive);
+
                         indexesActive.forEach( index => {
-                            allRecipes[index].active = true;
-                            allRecipes[index].activeTag.search = true;
-                            //console.log('plat qui correspond', allRecipes[index])
+                            allRecipes.forEach(recipe => {
+                                if(recipe.id == index) {
+                                    recipe.active = true;
+                                    recipe.activeTag.search = true;
+                                }
+                            })
+
                         })
-                        indexesNoneActive.forEach( index => {
-                            allRecipes[index].activeTag.search = false;
-                            allRecipes[index].active = false
+                        indexesNoneActive.forEach(index => {
+                            console.log("index", index)
+                            allRecipes.forEach(recipe => {
+                                if(recipe.id == index) {
+                                    recipe.active = false;
+                                    recipe.activeTag.search = false
+                                }
+                            })
                         })
+
                         recipesContainer.innerHTML = '';
                         displayActiveCards(allRecipes);
                         updateSuggestions()
@@ -303,7 +311,7 @@ fetch(recipesData)
             }
         })
     }
-    //searchAlternative()
+    searchAlternative()
 
 
         /**
