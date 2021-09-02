@@ -1731,8 +1731,16 @@ function searchA() {
         const results = []
         resultsArray.forEach( result => {
             if(/^(?!\s*$).+/.test(result)) {
-                data.forEach(recipe => {
-                    if (recipe.name.includes(result) || recipe.description.includes(result) || recipe.appliance.includes(result) || recipe.ustensils.includes(result) || recipe.ingredients.some(ingredient => ingredient.ingredient.includes(result))){
+                data
+                    .filter(recipe => recipe.active === true)
+                    .forEach(recipe => {
+                    if (recipe.name.toLowerCase().includes(result)
+                        || recipe.description.includes(result)
+                        || recipe.appliance.toLowerCase().includes(result)
+                        || recipe.ustensils.map(utensil => utensil.toLowerCase()).includes(result)
+                        || recipe.ingredients
+                            .map( element => {element.ingredient.toLowerCase()})
+                            .includes(result)){
                         results.push(recipe)
                     } else {
                     }
@@ -1745,24 +1753,45 @@ function searchA() {
 searchA()
 
 function searchAlternative() {
-    const allRecipesStringify = data.map( recipe => `${JSON.stringify(recipe)}`);
     const results = [];
     if (inputValue.match(/(.*[a-z]){3}/i)) {
+        const allRecipesStringify = data
+            .filter( recipe => recipe.active === true)
+            .map( recipe => `${recipe.id} ${JSON.stringify(recipe).toLowerCase()}`);
         const resultsArray = inputValue.split(/[ ,]+/)
         resultsArray.forEach( result => {
             if(/^(?!\s*$).+/.test(result)) {
-                const indexesActive = [];
-                const indexesNoneActive = [];
+
+                let indexesActive = [];
+                let indexesNoneActive = []
                 let i
                 for(i=0; i<allRecipesStringify.length; i++) {
                     if(allRecipesStringify[i].includes(result)) {
-                        indexesActive.push(i)
+                        indexesActive.push(allRecipesStringify[i].charAt(0)+allRecipesStringify[i].charAt(1));
                     } else {
-                        indexesNoneActive.push(i)
+                        indexesNoneActive.push(allRecipesStringify[i].charAt(0)+allRecipesStringify[i].charAt(1))
                     }
                 }
+                indexesActive = indexesActive.map(index => index.replace(/\s+/g, ''));
+                indexesNoneActive = indexesNoneActive.map(index => index.replace(/\s+/g, ''));
+                //console.log('indexes non active',indexesNoneActive);
+
                 indexesActive.forEach( index => {
-                    results.push(data[index])
+                    data.forEach(recipe => {
+                        if(recipe.id == index) {
+                            recipe.active = true;
+                            recipe.activeTag.search = true;
+                        }
+                    })
+
+                })
+                indexesNoneActive.forEach(index => {
+                    data.forEach(recipe => {
+                        if(recipe.id == index) {
+                            recipe.active = false;
+                            recipe.activeTag.search = false
+                        }
+                    })
                 })
             }
         })

@@ -214,7 +214,7 @@ fetch(recipesData)
                             function displayNoneMessage() {
                                 message.style.display = "none"
                             }
-                            setTimeout(displayNoneMessage, 3000)
+                            setTimeout(displayNoneMessage, 2000)
                         }
                     } else {
                         console.log('empty')
@@ -246,7 +246,6 @@ fetch(recipesData)
                     .map( recipe => `${recipe.id} ${JSON.stringify(recipe).toLowerCase()}`);
                 const resultsArray = mainSearchBar.value.split(/[ ,]+/)
                 resultsArray.forEach( result => {
-                    //console.log('recipe', result)
                     // check if not empty
                     if(/^(?!\s*$).+/.test(result)) {
                         //console.log('not empty')
@@ -274,7 +273,6 @@ fetch(recipesData)
 
                         })
                         indexesNoneActive.forEach(index => {
-                            console.log("index", index)
                             allRecipes.forEach(recipe => {
                                 if(recipe.id == index) {
                                     recipe.active = false;
@@ -282,7 +280,6 @@ fetch(recipesData)
                                 }
                             })
                         })
-
                         recipesContainer.innerHTML = '';
                         displayActiveCards(allRecipes);
                         updateSuggestions()
@@ -295,10 +292,11 @@ fetch(recipesData)
                     function displayNoneMessage() {
                         message.style.display = "none"
                     }
-                    setTimeout(displayNoneMessage, 3000)
+                    setTimeout(displayNoneMessage, 2000)
                 }
 
-            } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
+            } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i)
+                || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
                 recipesContainer.innerHTML = '';
             } else {
                 allRecipes.forEach(recipe => {
