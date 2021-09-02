@@ -196,8 +196,17 @@ fetch(recipesData)
                 resultsArray.forEach( result => {
                     //console.log('recipe', result)
                     if(/^(?!\s*$).+/.test(result)) {
-                        allRecipes.forEach(recipe => {
-                            if (recipe.name.includes(result) || recipe.description.includes(result) || recipe.appliance.includes(result) || recipe.ustensils.includes(result) || recipe.ingredients.some(ingredient => ingredient.ingredient.includes(result))){
+                        allRecipes
+                            .filter(recipe => recipe.active === true)
+                            .forEach(recipe => {
+                                //console.log(recipe.ingredients.map(element => element.ingredient.toLowerCase()))
+                            if (recipe.name.toLowerCase().includes(result)
+                                || recipe.description.includes(result)
+                                || recipe.appliance.toLowerCase().includes(result)
+                                || recipe.ustensils.map(utensil => utensil.toLowerCase()).includes(result)
+                                || recipe.ingredients
+                                    .map( element => {element.ingredient.toLowerCase()})
+                                    .includes(result)){
                                 recipe.activeTag.search = true;
                                 recipe.active = true;
                                 //console.log('plat qui correspond', recipe.name)
@@ -225,7 +234,6 @@ fetch(recipesData)
                 recipesContainer.innerHTML = '';
                 displayActiveCards(allRecipes)
             } else {
-                //TODO : faire des tests
                 allRecipes.forEach(recipe => {
                     recipe.activeTag.search = false
                 })
@@ -239,17 +247,15 @@ fetch(recipesData)
     searchA()
 
     function searchAlternative() {
-        const allRecipesStringify = allRecipes.map( recipe => `${recipe.index} ${JSON.stringify(recipe)}`);
-
         mainSearchBar.addEventListener( "keyup", ()=>  {
             if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
-                console.log('split', mainSearchBar.value.split(/[ ,]+/));
+                const allRecipesStringify = allRecipes.map( recipe => `${recipe.index} ${JSON.stringify(recipe)}`);
                 const resultsArray = mainSearchBar.value.split(/[ ,]+/)
                 resultsArray.forEach( result => {
-                    console.time("method 1")
-                    console.log('recipe', result)
+                    //console.log('recipe', result)
+                    // check if not empty
                     if(/^(?!\s*$).+/.test(result)) {
-                        console.log('not empty')
+                        //console.log('not empty')
                         const indexesActive = [];
                         const indexesNoneActive = []
                         let i
@@ -263,7 +269,7 @@ fetch(recipesData)
                         indexesActive.forEach( index => {
                             allRecipes[index].active = true;
                             allRecipes[index].activeTag.search = true;
-                            console.log('plat qui correspond', allRecipes[index])
+                            //console.log('plat qui correspond', allRecipes[index])
                         })
                         indexesNoneActive.forEach( index => {
                             allRecipes[index].activeTag.search = false;
@@ -275,18 +281,24 @@ fetch(recipesData)
                     } else {
                         console.log('empty')
                     }
-            console.timeEnd("method 1")
                 })
+                if(allRecipes.every( recipe => recipe.activeTag.search === false)) {
+                    message.style.display = "block";
+                    function displayNoneMessage() {
+                        message.style.display = "none"
+                    }
+                    setTimeout(displayNoneMessage, 3000)
+                }
 
             } else if (mainSearchBar.value.match(/(.*[a-z]){2}/i) || mainSearchBar.value.match(/(.*[a-z]){1}/i)) {
                 recipesContainer.innerHTML = '';
             } else {
-                //TODO : retravailler, afficher tout actif n'est pas la bonne solution
                 allRecipes.forEach(recipe => {
-                    recipe.active = true;
-                    recipesContainer.innerHTML = '';
-                    displayActiveCards(allRecipes)
+                    recipe.activeTag.search = false
                 })
+                recipesContainer.innerHTML = '';
+                allRecipes = activateAndDeactivateRecipes(allRecipes)
+                displayActiveCards(allRecipes)
                 updateAllLists(allRecipes.filter( recipe => recipe.active === true))
             }
         })
