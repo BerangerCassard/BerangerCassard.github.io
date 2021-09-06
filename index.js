@@ -236,9 +236,9 @@ fetch(recipesData)
             }
         })
     }
-    //searchA()
+    searchA()
 
-    function searchAlternative() {
+/*    function searchAlternative() {
         mainSearchBar.addEventListener( "keyup", ()=>  {
             if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
                 const allRecipesStringify = allRecipes
@@ -309,7 +309,7 @@ fetch(recipesData)
             }
         })
     }
-    searchAlternative()
+    searchAlternative()*/
 
 
         /**
