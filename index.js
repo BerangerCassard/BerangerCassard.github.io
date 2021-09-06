@@ -180,7 +180,7 @@ fetch(recipesData)
     /**
      * Principal Search Bar
      * */
-    function searchA() {
+/*    function searchA() {
         mainSearchBar.addEventListener( "keyup", ()=>  {
             if (mainSearchBar.value.match(/(.*[a-z]){3}/i)) {
                 //console.log('split', mainSearchBar.value.split(/[ ,]+/));
@@ -236,7 +236,7 @@ fetch(recipesData)
             }
         })
     }
-    //searchA()
+    //searchA()*/
 
     function searchAlternative() {
         mainSearchBar.addEventListener( "keyup", ()=>  {
@@ -310,7 +310,6 @@ fetch(recipesData)
         })
     }
     searchAlternative()
-
 
         /**
      * Display all recipes cards
