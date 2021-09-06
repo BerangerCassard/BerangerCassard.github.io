@@ -30,6 +30,7 @@ header, .search {
   height: 364px;
   background-color: #E7E7E7;
   border-radius: 5px;
+  cursor: pointer;
 }
 .recipesList__card__image {
   background-color: #C7BEBE;

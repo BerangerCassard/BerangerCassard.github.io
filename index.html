@@ -12,56 +12,56 @@
     <title>Les Petits Plats</title>
 </head>
 <body>
-<div class="bloc">
-    <header>
-        <img id="logo" src="src/assets/images/logo_les_petits_plats.png">
-        <div class="searchBar">
-            <input type="text" id="searchBar" placeholder="Recherchez un ingrédient, appareil, ustentiles ou une recette">
-            <div class="searchBarIcon"><i class="fas fa-search"></i></div>
-        </div>
-        <div id="suggestions"></div>
-    </header>
-    <div class="search sketch">
-        <div class="search__checkedTags sketch">
-            <div id="ingredientSelectTag" class="search__checkedTags__tag sketch">
-                <div id="ingredientTag"></div>
-                <i id="ingredientCross" class="fas fa-times-circle"></i>
+    <div class="bloc">
+        <header>
+            <img id="logo" src="src/assets/images/logo_les_petits_plats.png" alt="Les Petits Plats logo">
+            <div class="searchBar">
+                <input type="text" id="searchBar" placeholder="Recherchez un ingrédient, appareil, ustentiles ou une recette">
+                <div class="searchBarIcon"><i class="fas fa-search"></i></div>
             </div>
-            <div id="applianceSelectTag" class="search__checkedTags__tag sketch">
-                <div id="applianceTag"></div>
-                <i id="applianceCross" class="fas fa-times-circle"></i></div>
-            <div id="utensilSelectedTag" class="search__checkedTags__tag sketch">
-                <div id="utensilTag"></div>
-                <i id="utensilCross" class="fas fa-times-circle"></i></div>
-        </div>
-        <div class="search__tagsLists sketch">
-            <div id="ingredientsContainer" class="tagsListsContainer">
-                <div class="search__tagsLists__frame sketch">
-                    <input type="text" id="searchIngredient" class="search__tagsLists__frame__input" placeholder="Ingrédients">
-                    <div class="search__tagsLists__frame__block" id="ingredientArrowBloc"></div>
+            <div id="suggestions"></div>
+        </header>
+        <div class="search sketch">
+            <div class="search__checkedTags sketch">
+                <div id="ingredientSelectTag" class="search__checkedTags__tag sketch">
+                    <div id="ingredientTag"></div>
+                    <i id="ingredientCross" class="fas fa-times-circle"></i>
                 </div>
-                <div id="ingredientsSuggestions" class="search__tagsLists__suggestionsList sketch"></div>
+                <div id="applianceSelectTag" class="search__checkedTags__tag sketch">
+                    <div id="applianceTag"></div>
+                    <i id="applianceCross" class="fas fa-times-circle"></i></div>
+                <div id="utensilSelectedTag" class="search__checkedTags__tag sketch">
+                    <div id="utensilTag"></div>
+                    <i id="utensilCross" class="fas fa-times-circle"></i></div>
             </div>
-            <div id="appliancesContainer" class="tagsListsContainer" >
-                <div class="search__tagsLists__frame sketch">
-                    <input type="text" id="searchAppareil" class="search__tagsLists__frame__input" placeholder="Appareils">
-                    <div class="search__tagsLists__frame__block" id="appareilArrowBloc"></div>
+            <div class="search__tagsLists sketch">
+                <div id="ingredientsContainer" class="tagsListsContainer">
+                    <div class="search__tagsLists__frame sketch">
+                        <input type="text" id="searchIngredient" class="search__tagsLists__frame__input" placeholder="Ingrédients">
+                        <div class="search__tagsLists__frame__block" id="ingredientArrowBloc"></div>
+                    </div>
+                    <div id="ingredientsSuggestions" class="search__tagsLists__suggestionsList sketch"></div>
                 </div>
-                <div id="appareilsSuggestions" class="search__tagsLists__suggestionsList sketch"></div>
-            </div>
-            <div id="utensilsContainer" class="tagsListsContainer">
-                <div class="search__tagsLists__frame sketch">
-                    <input type="text" id="searchUstensile" class="search__tagsLists__frame__input" placeholder="Ustensiles">
-                    <div class="search__tagsLists__frame__block" id="utensilArrowBloc"></div>
+                <div id="appliancesContainer" class="tagsListsContainer" >
+                    <div class="search__tagsLists__frame sketch">
+                        <input type="text" id="searchAppareil" class="search__tagsLists__frame__input" placeholder="Appareils">
+                        <div class="search__tagsLists__frame__block" id="appareilArrowBloc"></div>
+                    </div>
+                    <div id="appareilsSuggestions" class="search__tagsLists__suggestionsList sketch"></div>
                 </div>
-                <div id="utensilsSuggestions" class="search__tagsLists__suggestionsList sketch"></div>
+                <div id="utensilsContainer" class="tagsListsContainer">
+                    <div class="search__tagsLists__frame sketch">
+                        <input type="text" id="searchUstensile" class="search__tagsLists__frame__input" placeholder="Ustensiles">
+                        <div class="search__tagsLists__frame__block" id="utensilArrowBloc"></div>
+                    </div>
+                    <div id="utensilsSuggestions" class="search__tagsLists__suggestionsList sketch"></div>
+                </div>
             </div>
+            <div id="message"> Aucune recette ne correspond à votre critère… vous pouvez
+                chercher « tarte aux pommes », « poisson », etc. </div>
+        <div id="recipesContainer" class="recipesList sketch">
         </div>
-        <div id="message"> Aucune recette ne correspond à votre critère… vous pouvez
-            chercher « tarte aux pommes », « poisson », etc. </div>
-    <div id="recipesContainer" class="recipesList sketch">
     </div>
-</div>
-<script type="module" src="index.js"></script>
+    <script type="module" src="index.js"></script>
 </body>
 </html>
